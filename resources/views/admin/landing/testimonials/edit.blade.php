@@ -37,7 +37,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('admin.landing.testimonials.update', $testimonial) }}" class="space-y-4">
+                    <form method="POST" action="{{ route('admin.landing.testimonials.update', $testimonial) }}" class="space-y-4" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -58,8 +58,11 @@
                         </div>
 
                         <div>
-                            <x-input-label for="image_path" value="Image Path" />
-                            <x-text-input id="image_path" name="image_path" class="mt-1 block w-full" :value="old('image_path', $testimonial->image_path)" />
+                            <x-input-label for="image" value="Image" />
+                            <x-text-input id="image" name="image" type="file" class="mt-1 block w-full" />
+                            @if(!empty($testimonial->image))
+                                <img src="{{ asset(ltrim($testimonial->image, '/')) }}" alt="Testimonial image" class="mt-2 h-20 rounded object-cover">
+                            @endif
                         </div>
 
                         <div>

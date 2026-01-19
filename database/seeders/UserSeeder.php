@@ -24,6 +24,8 @@ class UserSeeder extends Seeder
             'users.edit',
             'users.delete',
             'manage landing',
+            'manage about',
+            'manage admissions',
         ];
 
         foreach ($permissions as $permission) {

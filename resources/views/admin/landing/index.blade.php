@@ -8,6 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow" href="{{ route('admin.landing.sections.index') }}">Sections (including Admissions)</a>
                 <a class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow" href="{{ route('admin.landing.hero') }}">Hero</a>
                 <a class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow" href="{{ route('admin.landing.stats.index') }}">Statistics</a>
                 <a class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow" href="{{ route('admin.landing.programs.index') }}">Featured Programs</a>

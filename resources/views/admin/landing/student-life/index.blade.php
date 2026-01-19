@@ -243,7 +243,7 @@
                             <thead>
                                 <tr class="text-left text-gray-600 dark:text-gray-300">
                                     <th class="py-2">Title</th>
-                                    <th class="py-2">CTA</th>
+                                    <th class="py-2">Link Label</th>
                                     <th class="py-2">Order</th>
                                     <th class="py-2">Active</th>
                                     <th class="py-2 text-right">Actions</th>
@@ -253,7 +253,7 @@
                                 @forelse ($items as $item)
                                     <tr>
                                         <td class="py-2">{{ $item->title }}</td>
-                                        <td class="py-2">{{ $item->cta_text }}</td>
+                                        <td class="py-2">{{ $item->link_label }}</td>
                                         <td class="py-2">{{ $item->sort_order }}</td>
                                         <td class="py-2">{{ $item->is_active ? 'Yes' : 'No' }}</td>
                                         <td class="py-2 text-right">

@@ -37,7 +37,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('admin.landing.news.update', $newsItem) }}" class="space-y-4">
+                    <form method="POST" action="{{ route('admin.landing.news.update', $newsItem) }}" class="space-y-4" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -63,8 +63,11 @@
                         </div>
 
                         <div>
-                            <x-input-label for="author_image_path" value="Author Image Path" />
-                            <x-text-input id="author_image_path" name="author_image_path" class="mt-1 block w-full" :value="old('author_image_path', $newsItem->author_image_path)" />
+                            <x-input-label for="author_image" value="Author Image" />
+                            <x-text-input id="author_image" name="author_image" type="file" class="mt-1 block w-full" />
+                            @if(!empty($newsItem->author_image))
+                                <img src="{{ asset(ltrim($newsItem->author_image, '/')) }}" alt="Author image" class="mt-2 h-20 rounded object-cover">
+                            @endif
                         </div>
 
                         <div>
@@ -73,8 +76,11 @@
                         </div>
 
                         <div>
-                            <x-input-label for="image_path" value="Image Path" />
-                            <x-text-input id="image_path" name="image_path" class="mt-1 block w-full" :value="old('image_path', $newsItem->image_path)" />
+                            <x-input-label for="image" value="Image" />
+                            <x-text-input id="image" name="image" type="file" class="mt-1 block w-full" />
+                            @if(!empty($newsItem->image))
+                                <img src="{{ asset(ltrim($newsItem->image, '/')) }}" alt="News image" class="mt-2 h-20 rounded object-cover">
+                            @endif
                         </div>
 
                         <div>

@@ -25,6 +25,16 @@
                             {{ __('Landing Setup') }}
                         </x-nav-link>
                     @endcan
+                    @can('manage about')
+                        <x-nav-link :href="route('admin.about.index')" :active="request()->routeIs('admin.about.*')">
+                            {{ __('About Setup') }}
+                        </x-nav-link>
+                    @endcan
+                    @can('manage admissions')
+                        <x-nav-link :href="route('admin.admissions.index')" :active="request()->routeIs('admin.admissions.*')">
+                            {{ __('Admissions Setup') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -88,6 +98,16 @@
             @can('manage landing')
                 <x-responsive-nav-link :href="route('admin.landing.index')" :active="request()->routeIs('admin.landing.*')">
                     {{ __('Landing Setup') }}
+                </x-responsive-nav-link>
+            @endcan
+            @can('manage about')
+                <x-responsive-nav-link :href="route('admin.about.index')" :active="request()->routeIs('admin.about.*')">
+                    {{ __('About Setup') }}
+                </x-responsive-nav-link>
+            @endcan
+            @can('manage admissions')
+                <x-responsive-nav-link :href="route('admin.admissions.index')" :active="request()->routeIs('admin.admissions.*')">
+                    {{ __('Admissions Setup') }}
                 </x-responsive-nav-link>
             @endcan
         </div>

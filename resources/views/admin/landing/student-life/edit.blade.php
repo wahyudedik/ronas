@@ -37,7 +37,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('admin.landing.student-life.update', $item) }}" class="space-y-4">
+                    <form method="POST" action="{{ route('admin.landing.student-life.update', $item) }}" class="space-y-4" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -53,18 +53,21 @@
                         </div>
 
                         <div>
-                            <x-input-label for="image_path" value="Image Path" />
-                            <x-text-input id="image_path" name="image_path" class="mt-1 block w-full" :value="old('image_path', $item->image_path)" />
+                            <x-input-label for="image" value="Image" />
+                            <x-text-input id="image" name="image" type="file" class="mt-1 block w-full" />
+                            @if(!empty($item->image))
+                                <img src="{{ asset(ltrim($item->image, '/')) }}" alt="Student life image" class="mt-2 h-20 rounded object-cover">
+                            @endif
                         </div>
 
                         <div>
-                            <x-input-label for="cta_text" value="CTA Text" />
-                            <x-text-input id="cta_text" name="cta_text" class="mt-1 block w-full" :value="old('cta_text', $item->cta_text)" />
+                            <x-input-label for="link_label" value="Link Label" />
+                            <x-text-input id="link_label" name="link_label" class="mt-1 block w-full" :value="old('link_label', $item->link_label)" />
                         </div>
 
                         <div>
-                            <x-input-label for="cta_url" value="CTA URL" />
-                            <x-text-input id="cta_url" name="cta_url" class="mt-1 block w-full" :value="old('cta_url', $item->cta_url)" />
+                            <x-input-label for="link_url" value="Link URL" />
+                            <x-text-input id="link_url" name="link_url" class="mt-1 block w-full" :value="old('link_url', $item->link_url)" />
                         </div>
 
                         <div>

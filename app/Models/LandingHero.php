@@ -36,25 +36,3 @@ class LandingHero extends Model
         'sort_order',
     ];
 }
-<?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
-
-class LandingHero extends Model
-{
-    protected $fillable = [
-        'title',
-        'subtitle',
-        'description',
-        'badge_text',
-        'badge_icon',
-        'primary_cta_text',
-        'primary_cta_url',
-        'secondary_cta_text',
-        'secondary_cta_url',
-        'image_path',
-        'is_active',
-    ];
-}

@@ -19,21 +19,3 @@ class LandingTestimonial extends Model
         'is_active',
     ];
 }
-<?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
-
-class LandingTestimonial extends Model
-{
-    protected $fillable = [
-        'name',
-        'role',
-        'quote',
-        'image_path',
-        'rating',
-        'sort_order',
-        'is_active',
-    ];
-}

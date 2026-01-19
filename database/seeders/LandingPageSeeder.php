@@ -43,11 +43,19 @@ class LandingPageSeeder extends Seeder
                 'is_active' => true,
             ],
             [
+                'key' => 'admissions',
+                'title' => 'Admissions',
+                'subtitle' => 'Start your journey with our admissions guide.',
+                'description' => 'Review steps, requirements, and important deadlines.',
+                'sort_order' => 3,
+                'is_active' => true,
+            ],
+            [
                 'key' => 'student_life',
                 'title' => 'Students Life',
                 'subtitle' => 'Experience a vibrant campus community.',
                 'description' => null,
-                'sort_order' => 3,
+                'sort_order' => 4,
                 'is_active' => true,
             ],
             [
@@ -55,7 +63,7 @@ class LandingPageSeeder extends Seeder
                 'title' => 'Testimonials',
                 'subtitle' => 'Hear from our students and alumni.',
                 'description' => null,
-                'sort_order' => 4,
+                'sort_order' => 5,
                 'is_active' => true,
             ],
             [
@@ -63,7 +71,7 @@ class LandingPageSeeder extends Seeder
                 'title' => 'Recent News',
                 'subtitle' => 'Latest stories from our campus.',
                 'description' => null,
-                'sort_order' => 5,
+                'sort_order' => 6,
                 'is_active' => true,
             ],
             [
@@ -71,7 +79,7 @@ class LandingPageSeeder extends Seeder
                 'title' => 'Events',
                 'subtitle' => 'Join our upcoming events and workshops.',
                 'description' => null,
-                'sort_order' => 6,
+                'sort_order' => 7,
                 'is_active' => true,
             ],
         ]);

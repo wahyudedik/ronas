@@ -8,6 +8,7 @@
   $statsSection = $sections['stats'] ?? null;
   $programsSection = $sections['programs'] ?? null;
   $studentLifeSection = $sections['student_life'] ?? null;
+  $admissionsSection = $sections['admissions'] ?? null;
   $testimonialsSection = $sections['testimonials'] ?? null;
   $newsSection = $sections['news'] ?? null;
   $eventsSection = $sections['events'] ?? null;
@@ -17,6 +18,7 @@
   $showStats = !$statsSection || $statsSection->is_active;
   $showNews = !$newsSection || $newsSection->is_active;
   $showEvents = !$eventsSection || $eventsSection->is_active;
+  $showAdmissions = !$admissionsSection || $admissionsSection->is_active;
 @endphp
 
 <main class="main">
@@ -92,6 +94,94 @@
       </div>
     @endif
   </section>
+
+  @if($aboutHistory || $aboutMission || $aboutVision || $aboutValues->isNotEmpty() || $aboutLeadership)
+  <section id="about" class="about section">
+    <div class="container section-title" data-aos="fade-up">
+      <h2>{{ $aboutHistory?->title ?? 'About Our Campus' }}</h2>
+      <p>{{ $aboutHistory?->heading ?? '' }}</p>
+    </div>
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row gy-4 align-items-start">
+        <div class="col-lg-6">
+          <div class="about-content">
+            <p>{{ $aboutHistory?->description ?? '' }}</p>
+            <div class="mt-4">
+              <a href="{{ route('college.about') }}" class="btn btn-primary">Learn More</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          @if(!empty($aboutHistory?->image))
+            <img src="{{ asset(ltrim($aboutHistory->image, '/')) }}" alt="About" class="img-fluid rounded">
+          @endif
+          <div class="row mt-4 g-3">
+            @if($aboutMission)
+              <div class="col-md-6">
+                <div class="p-3 border rounded h-100">
+                  <h5 class="mb-2">{{ $aboutMission?->title ?? 'Our Mission' }}</h5>
+                  <p class="mb-0">{{ $aboutMission?->description ?? '' }}</p>
+                </div>
+              </div>
+            @endif
+            @if($aboutVision)
+              <div class="col-md-6">
+                <div class="p-3 border rounded h-100">
+                  <h5 class="mb-2">{{ $aboutVision?->title ?? 'Our Vision' }}</h5>
+                  <p class="mb-0">{{ $aboutVision?->description ?? '' }}</p>
+                </div>
+              </div>
+            @endif
+          </div>
+        </div>
+      </div>
+
+      @if($aboutValues->isNotEmpty())
+        <div class="row mt-5 g-4">
+          @foreach($aboutValues as $value)
+            <div class="col-md-6 col-lg-3">
+              <div class="value-card h-100">
+                <div class="value-icon">
+                  <i class="{{ $value->icon_class ?? 'bi bi-stars' }}"></i>
+                </div>
+                <h4>{{ $value->title }}</h4>
+                <p>{{ $value->description }}</p>
+              </div>
+            </div>
+          @endforeach
+        </div>
+      @endif
+
+      @if($aboutLeadership && $aboutLeaders->isNotEmpty())
+        <div class="row mt-5 g-4">
+          <div class="col-12">
+            <h3 class="mb-3">{{ $aboutLeadership?->title ?? 'Leadership Team' }}</h3>
+          </div>
+          @foreach($aboutLeaders as $leader)
+            <div class="col-md-6 col-lg-3">
+              <div class="team-card">
+                <div class="card-inner">
+                  <div class="card-front">
+                    <div class="member-image">
+                      @if($leader->image)
+                        <img src="{{ asset(ltrim($leader->image, '/')) }}" alt="{{ $leader->name }}" class="img-fluid">
+                      @endif
+                    </div>
+                    <div class="member-info">
+                      <h4>{{ $leader->name }}</h4>
+                      <p>{{ $leader->role }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          @endforeach
+        </div>
+      @endif
+    </div>
+  </section>
+  @endif
 
   @if($showPrograms)
   <section id="featured-programs" class="featured-programs section">
@@ -174,6 +264,53 @@
               @endforeach
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  @endif
+
+  @if($showAdmissions && ($admissionsSteps->isNotEmpty() || $admissionsRequirements->isNotEmpty() || $admissionsDeadlines->isNotEmpty()))
+  <section id="admissions" class="admissions section">
+    <div class="container section-title" data-aos="fade-up">
+      <h2>{{ $admissionsSection?->title ?? $admissionsSetting?->page_title ?? 'Admissions' }}</h2>
+      <p>{{ $admissionsSection?->subtitle ?? $admissionsSection?->description ?? '' }}</p>
+    </div>
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row gy-4">
+        <div class="col-lg-4">
+          <h4 class="mb-3">{{ $admissionsSetting?->steps_title ?? 'Steps' }}</h4>
+          <ul class="list-unstyled">
+            @foreach($admissionsSteps as $step)
+              <li class="mb-3">
+                <strong>{{ $step->step_number ?? str_pad((string) ($loop->index + 1), 2, '0', STR_PAD_LEFT) }}</strong>
+                <div>{{ $step->title }}</div>
+                <small class="text-muted">{{ $step->description }}</small>
+              </li>
+            @endforeach
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <h4 class="mb-3">{{ $admissionsRequirementSetting?->title ?? 'Requirements' }}</h4>
+          <ul class="list-unstyled">
+            @foreach($admissionsRequirements as $requirement)
+              <li class="mb-2"><i class="bi bi-check-circle me-2"></i>{{ $requirement->text }}</li>
+            @endforeach
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <h4 class="mb-3">{{ $admissionsDeadlineSetting?->title ?? 'Deadlines' }}</h4>
+          <ul class="list-unstyled">
+            @foreach($admissionsDeadlines as $deadline)
+              <li class="mb-2">
+                <strong>{{ $deadline->date_text }}</strong> - {{ $deadline->title }}
+              </li>
+            @endforeach
+          </ul>
+          <a href="{{ route('college.admissions') }}" class="btn btn-primary mt-3">
+            {{ $admissionsRequestInfo?->submit_label ?? 'See Admissions' }}
+          </a>
         </div>
       </div>
     </div>

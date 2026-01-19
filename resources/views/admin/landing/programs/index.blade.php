@@ -245,7 +245,7 @@
                             <thead>
                                 <tr class="text-left text-gray-600 dark:text-gray-300">
                                     <th class="py-2">Title</th>
-                                    <th class="py-2">Level</th>
+                                    <th class="py-2">Degree</th>
                                     <th class="py-2">Duration</th>
                                     <th class="py-2">Order</th>
                                     <th class="py-2">Active</th>
@@ -256,8 +256,8 @@
                                 @forelse ($programs as $program)
                                     <tr>
                                         <td class="py-2">{{ $program->title }}</td>
-                                        <td class="py-2">{{ $program->level }}</td>
-                                        <td class="py-2">{{ $program->duration }}</td>
+                                        <td class="py-2">{{ $program->degree_text }}</td>
+                                        <td class="py-2">{{ $program->duration_text }}</td>
                                         <td class="py-2">{{ $program->sort_order }}</td>
                                         <td class="py-2">{{ $program->is_active ? 'Yes' : 'No' }}</td>
                                         <td class="py-2 text-right">

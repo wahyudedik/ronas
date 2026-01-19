@@ -27,59 +27,39 @@
         <div class="row align-items-center g-5">
           <div class="col-lg-6">
             <div class="about-content" data-aos="fade-up" data-aos-delay="200">
-              <h3>Our Story</h3>
-              <h2>Educating Minds, Inspiring Hearts</h2>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vitae odio ac nisi tristique venenatis. Nullam feugiat ipsum vitae justo finibus, in sagittis dolor malesuada. Aenean vel fringilla est, a vulputate massa.</p>
+              <h3>{{ $history?->title ?? 'Our Story' }}</h3>
+              <h2>{{ $history?->heading ?? 'Educating Minds, Inspiring Hearts' }}</h2>
+              <p>{{ $history?->description ?? '' }}</p>
 
+              @if($milestones->isNotEmpty())
               <div class="timeline">
-                <div class="timeline-item">
-                  <div class="timeline-dot"></div>
-                  <div class="timeline-content">
-                    <h4>1965</h4>
-                    <p>Etiam at tincidunt arcu. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+                @foreach($milestones as $milestone)
+                  <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                      <h4>{{ $milestone->year }}</h4>
+                      <p>{{ $milestone->description }}</p>
+                    </div>
                   </div>
-                </div>
-
-                <div class="timeline-item">
-                  <div class="timeline-dot"></div>
-                  <div class="timeline-content">
-                    <h4>1982</h4>
-                    <p>Donec dignissim, odio ac imperdiet luctus, ante nisl accumsan justo, nec tempus augue mi in nulla.</p>
-                  </div>
-                </div>
-
-                <div class="timeline-item">
-                  <div class="timeline-dot"></div>
-                  <div class="timeline-content">
-                    <h4>1998</h4>
-                    <p>Suspendisse potenti. Nullam lacinia dictum auctor. Phasellus euismod sem at dui imperdiet, ac tincidunt mi placerat.</p>
-                  </div>
-                </div>
-
-                <div class="timeline-item">
-                  <div class="timeline-dot"></div>
-                  <div class="timeline-content">
-                    <h4>2010</h4>
-                    <p>Vestibulum ultrices magna ut faucibus sollicitudin. Sed eget venenatis enim, nec imperdiet ex.</p>
-                  </div>
-                </div>
+                @endforeach
               </div>
+              @endif
             </div>
           </div>
 
           <div class="col-lg-6">
             <div class="about-image" data-aos="zoom-in" data-aos-delay="300">
-              <img src="/College/assets/img/education/campus-5.webp" alt="Campus" class="img-fluid rounded">
+              <img src="{{ $history?->image ? asset(ltrim($history->image, '/')) : asset('College/assets/img/education/campus-5.webp') }}" alt="Campus" class="img-fluid rounded">
 
-              <div class="mission-vision" data-aos="fade-up" data-aos-delay="400">
+              <div id="mission-vision" class="mission-vision" data-aos="fade-up" data-aos-delay="400">
                 <div class="mission">
-                  <h3>Our Mission</h3>
-                  <p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.</p>
+                  <h3>{{ $mission?->title ?? 'Our Mission' }}</h3>
+                  <p>{{ $mission?->description ?? '' }}</p>
                 </div>
 
                 <div class="vision">
-                  <h3>Our Vision</h3>
-                  <p>Nulla porttitor accumsan tincidunt. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum porta.</p>
+                  <h3>{{ $vision?->title ?? 'Our Vision' }}</h3>
+                  <p>{{ $vision?->description ?? '' }}</p>
                 </div>
               </div>
             </div>
@@ -88,48 +68,20 @@
 
         <div class="row mt-5">
           <div class="col-lg-12">
-            <div class="core-values" data-aos="fade-up" data-aos-delay="500">
+            <div id="core-values" class="core-values" data-aos="fade-up" data-aos-delay="500">
               <h3 class="text-center mb-4">Core Values</h3>
               <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-                <div class="col">
-                  <div class="value-card">
-                    <div class="value-icon">
-                      <i class="bi bi-book"></i>
+                @foreach($coreValues as $value)
+                  <div class="col">
+                    <div class="value-card">
+                      <div class="value-icon">
+                        <i class="{{ $value->icon_class ?? 'bi bi-star-fill' }}"></i>
+                      </div>
+                      <h4>{{ $value->title }}</h4>
+                      <p>{{ $value->description }}</p>
                     </div>
-                    <h4>Academic Excellence</h4>
-                    <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi.</p>
                   </div>
-                </div>
-
-                <div class="col">
-                  <div class="value-card">
-                    <div class="value-icon">
-                      <i class="bi bi-people"></i>
-                    </div>
-                    <h4>Community Engagement</h4>
-                    <p>Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus.</p>
-                  </div>
-                </div>
-
-                <div class="col">
-                  <div class="value-card">
-                    <div class="value-icon">
-                      <i class="bi bi-lightbulb"></i>
-                    </div>
-                    <h4>Innovation</h4>
-                    <p>Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.</p>
-                  </div>
-                </div>
-
-                <div class="col">
-                  <div class="value-card">
-                    <div class="value-icon">
-                      <i class="bi bi-globe"></i>
-                    </div>
-                    <h4>Global Perspective</h4>
-                    <p>Donec sollicitudin molestie malesuada. Curabitur non nulla sit amet nisl tempus.</p>
-                  </div>
-                </div>
+                @endforeach
               </div>
             </div>
           </div>
@@ -148,37 +100,30 @@
           <div class="row align-items-center">
             <div class="col-lg-6 order-lg-2 mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="200">
               <div class="intro-image">
-                <img src="/College/assets/img/education/teacher-5.webp" alt="School Leadership" class="img-fluid rounded-lg">
+                <img src="{{ $leadershipSection?->image ? asset(ltrim($leadershipSection->image, '/')) : asset('College/assets/img/education/teacher-5.webp') }}" alt="School Leadership" class="img-fluid rounded-lg">
                 <div class="experience-badge">
-                  <span class="years">35+</span>
-                  <span class="text">Years of Educational Excellence</span>
+                  <span class="years">{{ $leadershipSection?->experience_years ?? '35+' }}</span>
+                  <span class="text">{{ $leadershipSection?->experience_text ?? 'Years of Educational Excellence' }}</span>
                 </div>
               </div>
             </div>
             <div class="col-lg-6 order-lg-1" data-aos="fade-up" data-aos-delay="300">
               <div class="intro-content">
-                <span class="subtitle">Administration &amp; Leadership</span>
-                <h2 class="title">Inspiring Leaders Shaping Tomorrow's Generation</h2>
-                <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam auctor euismod lobortis. Mauris ornare ante non justo mattis, vitae fermentum est commodo. Morbi eget tristique justo. Mauris id tellus tempus, ornare ligula egestas, ultricies libero.</p>
+                <span class="subtitle">{{ $leadershipSection?->subtitle ?? 'Administration & Leadership' }}</span>
+                <h2 class="title">{{ $leadershipSection?->title ?? 'Inspiring Leaders Shaping Tomorrow\'s Generation' }}</h2>
+                <p class="description">{{ $leadershipSection?->description ?? '' }}</p>
                 <div class="highlights">
-                  <div class="highlight-item">
-                    <div class="icon-box">
-                      <i class="bi bi-mortarboard-fill"></i>
+                  @foreach($leadershipHighlights as $highlight)
+                    <div class="highlight-item">
+                      <div class="icon-box">
+                        <i class="{{ $highlight->icon_class ?? 'bi bi-star-fill' }}"></i>
+                      </div>
+                      <div class="content">
+                        <h4>{{ $highlight->title }}</h4>
+                        <p>{{ $highlight->description }}</p>
+                      </div>
                     </div>
-                    <div class="content">
-                      <h4>Expert Faculty</h4>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                  </div>
-                  <div class="highlight-item">
-                    <div class="icon-box">
-                      <i class="bi bi-graph-up-arrow"></i>
-                    </div>
-                    <div class="content">
-                      <h4>Academic Excellence</h4>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                  </div>
+                  @endforeach
                 </div>
               </div>
             </div>
@@ -187,219 +132,51 @@
 
         <div class="leadership-section" data-aos="fade-up">
           <div class="section-header text-center">
-            <span class="subtitle">Our Team</span>
-            <h2 class="title">Meet Our Distinguished Leadership</h2>
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc aliquet scelerisque pellentesque. Praesent vestibulum scelerisque scelerisque.</p>
+            <span class="subtitle">{{ $leadershipSection?->subtitle ?? 'Our Team' }}</span>
+            <h2 class="title">{{ $leadershipSection?->title ?? 'Meet Our Distinguished Leadership' }}</h2>
+            <p class="description">{{ $leadershipSection?->description ?? '' }}</p>
           </div>
 
           <div class="row g-4">
-            <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-              <div class="team-card">
-                <div class="card-inner">
-                  <div class="card-front">
-                    <div class="member-image">
-                      <img src="/College/assets/img/person/person-m-4.webp" alt="Principal" class="img-fluid">
+            @foreach($leadershipMembers as $member)
+              @php
+                $links = $member->social_links ?? [];
+                $delay = 100 + (($loop->index % 4) * 100);
+              @endphp
+              <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ $delay }}">
+                <div class="team-card">
+                  <div class="card-inner">
+                    <div class="card-front">
+                      <div class="member-image">
+                        @if($member->image)
+                          <img src="{{ asset(ltrim($member->image, '/')) }}" alt="{{ $member->name }}" class="img-fluid">
+                        @endif
+                      </div>
+                      <div class="member-info">
+                        <h4>{{ $member->name }}</h4>
+                        <p>{{ $member->role }}</p>
+                      </div>
                     </div>
-                    <div class="member-info">
-                      <h4>Dr. Robert Williams</h4>
-                      <p>Principal</p>
-                    </div>
-                  </div>
-                  <div class="card-back">
-                    <h4>Dr. Robert Williams</h4>
-                    <p class="position">Principal</p>
-                    <p class="bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam auctor euismod lobortis.</p>
-                    <div class="social-links">
-                      <a href="#"><i class="bi bi-linkedin"></i></a>
-                      <a href="#"><i class="bi bi-twitter-x"></i></a>
-                      <a href="#"><i class="bi bi-envelope"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-              <div class="team-card">
-                <div class="card-inner">
-                  <div class="card-front">
-                    <div class="member-image">
-                      <img src="/College/assets/img/person/person-f-6.webp" alt="Vice Principal" class="img-fluid">
-                    </div>
-                    <div class="member-info">
-                      <h4>Dr. Jennifer Parker</h4>
-                      <p>Vice Principal</p>
-                    </div>
-                  </div>
-                  <div class="card-back">
-                    <h4>Dr. Jennifer Parker</h4>
-                    <p class="position">Vice Principal</p>
-                    <p class="bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam auctor euismod lobortis.</p>
-                    <div class="social-links">
-                      <a href="#"><i class="bi bi-linkedin"></i></a>
-                      <a href="#"><i class="bi bi-twitter-x"></i></a>
-                      <a href="#"><i class="bi bi-envelope"></i></a>
+                    <div class="card-back">
+                      <h4>{{ $member->name }}</h4>
+                      <p class="position">{{ $member->role }}</p>
+                      <p class="bio">{{ $member->bio }}</p>
+                      <div class="social-links">
+                        @if(!empty($links['linkedin']))
+                          <a href="{{ $links['linkedin'] }}"><i class="bi bi-linkedin"></i></a>
+                        @endif
+                        @if(!empty($links['twitter']))
+                          <a href="{{ $links['twitter'] }}"><i class="bi bi-twitter-x"></i></a>
+                        @endif
+                        @if(!empty($links['email']))
+                          <a href="mailto:{{ $links['email'] }}"><i class="bi bi-envelope"></i></a>
+                        @endif
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-              <div class="team-card">
-                <div class="card-inner">
-                  <div class="card-front">
-                    <div class="member-image">
-                      <img src="/College/assets/img/person/person-m-9.webp" alt="Academic Dean" class="img-fluid">
-                    </div>
-                    <div class="member-info">
-                      <h4>Prof. Michael Stevens</h4>
-                      <p>Academic Dean</p>
-                    </div>
-                  </div>
-                  <div class="card-back">
-                    <h4>Prof. Michael Stevens</h4>
-                    <p class="position">Academic Dean</p>
-                    <p class="bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam auctor euismod lobortis.</p>
-                    <div class="social-links">
-                      <a href="#"><i class="bi bi-linkedin"></i></a>
-                      <a href="#"><i class="bi bi-twitter-x"></i></a>
-                      <a href="#"><i class="bi bi-envelope"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
-              <div class="team-card">
-                <div class="card-inner">
-                  <div class="card-front">
-                    <div class="member-image">
-                      <img src="/College/assets/img/person/person-f-5.webp" alt="Student Affairs" class="img-fluid">
-                    </div>
-                    <div class="member-info">
-                      <h4>Dr. Angela Martinez</h4>
-                      <p>Student Affairs</p>
-                    </div>
-                  </div>
-                  <div class="card-back">
-                    <h4>Dr. Angela Martinez</h4>
-                    <p class="position">Student Affairs</p>
-                    <p class="bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam auctor euismod lobortis.</p>
-                    <div class="social-links">
-                      <a href="#"><i class="bi bi-linkedin"></i></a>
-                      <a href="#"><i class="bi bi-twitter-x"></i></a>
-                      <a href="#"><i class="bi bi-envelope"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-              <div class="team-card">
-                <div class="card-inner">
-                  <div class="card-front">
-                    <div class="member-image">
-                      <img src="/College/assets/img/person/person-f-7.webp" alt="Admissions Director" class="img-fluid">
-                    </div>
-                    <div class="member-info">
-                      <h4>Sophia Rodriguez</h4>
-                      <p>Admissions Director</p>
-                    </div>
-                  </div>
-                  <div class="card-back">
-                    <h4>Sophia Rodriguez</h4>
-                    <p class="position">Admissions Director</p>
-                    <p class="bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam auctor euismod lobortis.</p>
-                    <div class="social-links">
-                      <a href="#"><i class="bi bi-linkedin"></i></a>
-                      <a href="#"><i class="bi bi-twitter-x"></i></a>
-                      <a href="#"><i class="bi bi-envelope"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-              <div class="team-card">
-                <div class="card-inner">
-                  <div class="card-front">
-                    <div class="member-image">
-                      <img src="/College/assets/img/person/person-m-8.webp" alt="Technology Director" class="img-fluid">
-                    </div>
-                    <div class="member-info">
-                      <h4>James Thompson</h4>
-                      <p>Technology Director</p>
-                    </div>
-                  </div>
-                  <div class="card-back">
-                    <h4>James Thompson</h4>
-                    <p class="position">Technology Director</p>
-                    <p class="bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam auctor euismod lobortis.</p>
-                    <div class="social-links">
-                      <a href="#"><i class="bi bi-linkedin"></i></a>
-                      <a href="#"><i class="bi bi-twitter-x"></i></a>
-                      <a href="#"><i class="bi bi-envelope"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-              <div class="team-card">
-                <div class="card-inner">
-                  <div class="card-front">
-                    <div class="member-image">
-                      <img src="/College/assets/img/person/person-m-3.webp" alt="Athletics Director" class="img-fluid">
-                    </div>
-                    <div class="member-info">
-                      <h4>Daniel Wilson</h4>
-                      <p>Athletics Director</p>
-                    </div>
-                  </div>
-                  <div class="card-back">
-                    <h4>Daniel Wilson</h4>
-                    <p class="position">Athletics Director</p>
-                    <p class="bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam auctor euismod lobortis.</p>
-                    <div class="social-links">
-                      <a href="#"><i class="bi bi-linkedin"></i></a>
-                      <a href="#"><i class="bi bi-twitter-x"></i></a>
-                      <a href="#"><i class="bi bi-envelope"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
-              <div class="team-card">
-                <div class="card-inner">
-                  <div class="card-front">
-                    <div class="member-image">
-                      <img src="/College/assets/img/person/person-f-4.webp" alt="Counseling Head" class="img-fluid">
-                    </div>
-                    <div class="member-info">
-                      <h4>Dr. Emily Chen</h4>
-                      <p>Counseling Head</p>
-                    </div>
-                  </div>
-                  <div class="card-back">
-                    <h4>Dr. Emily Chen</h4>
-                    <p class="position">Counseling Head</p>
-                    <p class="bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam auctor euismod lobortis.</p>
-                    <div class="social-links">
-                      <a href="#"><i class="bi bi-linkedin"></i></a>
-                      <a href="#"><i class="bi bi-twitter-x"></i></a>
-                      <a href="#"><i class="bi bi-envelope"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            @endforeach
           </div>
         </div>
 

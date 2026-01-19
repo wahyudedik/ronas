@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\CollegeAboutController;
+use App\Http\Controllers\CollegeAdmissionsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Admin\LandingSectionController;
@@ -11,11 +13,30 @@ use App\Http\Controllers\Admin\LandingStudentLifeItemController;
 use App\Http\Controllers\Admin\LandingTestimonialController;
 use App\Http\Controllers\Admin\LandingNewsItemController;
 use App\Http\Controllers\Admin\LandingEventItemController;
+use App\Http\Controllers\Admin\AboutHistoryController;
+use App\Http\Controllers\Admin\AboutHistoryMilestoneController;
+use App\Http\Controllers\Admin\AboutMissionVisionController;
+use App\Http\Controllers\Admin\AboutCoreValueController;
+use App\Http\Controllers\Admin\AboutLeadershipSectionController;
+use App\Http\Controllers\Admin\AboutLeadershipHighlightController;
+use App\Http\Controllers\Admin\AboutLeadershipMemberController;
+use App\Http\Controllers\Admin\AdmissionsPageSettingController;
+use App\Http\Controllers\Admin\AdmissionsApplicationStepController;
+use App\Http\Controllers\Admin\AdmissionsRequirementSettingController;
+use App\Http\Controllers\Admin\AdmissionsRequirementController;
+use App\Http\Controllers\Admin\AdmissionsTuitionSettingController;
+use App\Http\Controllers\Admin\AdmissionsTuitionController;
+use App\Http\Controllers\Admin\AdmissionsRequestInfoSettingController;
+use App\Http\Controllers\Admin\AdmissionsRequestProgramController;
+use App\Http\Controllers\Admin\AdmissionsDeadlineSettingController;
+use App\Http\Controllers\Admin\AdmissionsDeadlineController;
+use App\Http\Controllers\Admin\AdmissionsCampusVisitSettingController;
+use App\Http\Controllers\Admin\AdmissionsCampusVisitOptionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('college.index');
-Route::view('/about', 'college.about')->name('college.about');
-Route::view('/admissions', 'college.admissions')->name('college.admissions');
+Route::get('/about', [CollegeAboutController::class, 'index'])->name('college.about');
+Route::get('/admissions', [CollegeAdmissionsController::class, 'index'])->name('college.admissions');
 Route::view('/academics', 'college.academics')->name('college.academics');
 Route::view('/faculty-staff', 'college.faculty-staff')->name('college.faculty-staff');
 Route::view('/campus-facilities', 'college.campus-facilities')->name('college.campus-facilities');
@@ -71,6 +92,63 @@ Route::middleware('auth')->group(function () {
         Route::post('events/reorder', [LandingEventItemController::class, 'reorder'])->name('events.reorder');
         Route::patch('events/{event}/toggle', [LandingEventItemController::class, 'toggle'])->name('events.toggle');
         Route::resource('events', LandingEventItemController::class);
+    });
+
+    Route::middleware('permission:manage about')->prefix('dashboard/about')->name('admin.about.')->group(function () {
+        Route::get('/', function () {
+            return view('admin.about.index');
+        })->name('index');
+        Route::post('histories/reorder', [AboutHistoryController::class, 'reorder'])->name('histories.reorder');
+        Route::patch('histories/{history}/toggle', [AboutHistoryController::class, 'toggle'])->name('histories.toggle');
+        Route::resource('histories', AboutHistoryController::class);
+        Route::post('milestones/reorder', [AboutHistoryMilestoneController::class, 'reorder'])->name('milestones.reorder');
+        Route::patch('milestones/{milestone}/toggle', [AboutHistoryMilestoneController::class, 'toggle'])->name('milestones.toggle');
+        Route::resource('milestones', AboutHistoryMilestoneController::class);
+        Route::post('mission-visions/reorder', [AboutMissionVisionController::class, 'reorder'])->name('mission-visions.reorder');
+        Route::patch('mission-visions/{mission_vision}/toggle', [AboutMissionVisionController::class, 'toggle'])->name('mission-visions.toggle');
+        Route::resource('mission-visions', AboutMissionVisionController::class);
+        Route::post('core-values/reorder', [AboutCoreValueController::class, 'reorder'])->name('core-values.reorder');
+        Route::patch('core-values/{core_value}/toggle', [AboutCoreValueController::class, 'toggle'])->name('core-values.toggle');
+        Route::resource('core-values', AboutCoreValueController::class);
+        Route::post('leadership-sections/reorder', [AboutLeadershipSectionController::class, 'reorder'])->name('leadership-sections.reorder');
+        Route::patch('leadership-sections/{leadership_section}/toggle', [AboutLeadershipSectionController::class, 'toggle'])->name('leadership-sections.toggle');
+        Route::resource('leadership-sections', AboutLeadershipSectionController::class);
+        Route::post('leadership-highlights/reorder', [AboutLeadershipHighlightController::class, 'reorder'])->name('leadership-highlights.reorder');
+        Route::patch('leadership-highlights/{leadership_highlight}/toggle', [AboutLeadershipHighlightController::class, 'toggle'])->name('leadership-highlights.toggle');
+        Route::resource('leadership-highlights', AboutLeadershipHighlightController::class);
+        Route::post('leadership-members/reorder', [AboutLeadershipMemberController::class, 'reorder'])->name('leadership-members.reorder');
+        Route::patch('leadership-members/{leadership_member}/toggle', [AboutLeadershipMemberController::class, 'toggle'])->name('leadership-members.toggle');
+        Route::resource('leadership-members', AboutLeadershipMemberController::class);
+    });
+
+    Route::middleware('permission:manage admissions')->prefix('dashboard/admissions')->name('admin.admissions.')->group(function () {
+        Route::get('/', function () {
+            return view('admin.admissions.index');
+        })->name('index');
+        Route::resource('page-settings', AdmissionsPageSettingController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+        Route::post('application-steps/reorder', [AdmissionsApplicationStepController::class, 'reorder'])->name('application-steps.reorder');
+        Route::patch('application-steps/{application_step}/toggle', [AdmissionsApplicationStepController::class, 'toggle'])->name('application-steps.toggle');
+        Route::resource('application-steps', AdmissionsApplicationStepController::class);
+        Route::resource('requirement-settings', AdmissionsRequirementSettingController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+        Route::post('requirements/reorder', [AdmissionsRequirementController::class, 'reorder'])->name('requirements.reorder');
+        Route::patch('requirements/{requirement}/toggle', [AdmissionsRequirementController::class, 'toggle'])->name('requirements.toggle');
+        Route::resource('requirements', AdmissionsRequirementController::class);
+        Route::resource('tuition-settings', AdmissionsTuitionSettingController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+        Route::post('tuitions/reorder', [AdmissionsTuitionController::class, 'reorder'])->name('tuitions.reorder');
+        Route::patch('tuitions/{tuition}/toggle', [AdmissionsTuitionController::class, 'toggle'])->name('tuitions.toggle');
+        Route::resource('tuitions', AdmissionsTuitionController::class);
+        Route::resource('request-info-settings', AdmissionsRequestInfoSettingController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+        Route::post('request-programs/reorder', [AdmissionsRequestProgramController::class, 'reorder'])->name('request-programs.reorder');
+        Route::patch('request-programs/{request_program}/toggle', [AdmissionsRequestProgramController::class, 'toggle'])->name('request-programs.toggle');
+        Route::resource('request-programs', AdmissionsRequestProgramController::class);
+        Route::resource('deadline-settings', AdmissionsDeadlineSettingController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+        Route::post('deadlines/reorder', [AdmissionsDeadlineController::class, 'reorder'])->name('deadlines.reorder');
+        Route::patch('deadlines/{deadline}/toggle', [AdmissionsDeadlineController::class, 'toggle'])->name('deadlines.toggle');
+        Route::resource('deadlines', AdmissionsDeadlineController::class);
+        Route::resource('campus-visit-settings', AdmissionsCampusVisitSettingController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+        Route::post('campus-visit-options/reorder', [AdmissionsCampusVisitOptionController::class, 'reorder'])->name('campus-visit-options.reorder');
+        Route::patch('campus-visit-options/{campus_visit_option}/toggle', [AdmissionsCampusVisitOptionController::class, 'toggle'])->name('campus-visit-options.toggle');
+        Route::resource('campus-visit-options', AdmissionsCampusVisitOptionController::class);
     });
 });
 

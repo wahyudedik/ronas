@@ -7,18 +7,24 @@
 @php
   $statsSection = $sections['stats'] ?? null;
   $programsSection = $sections['programs'] ?? null;
+  $facultyHighlightsSection = $sections['faculty_highlights'] ?? null;
   $studentLifeSection = $sections['student_life'] ?? null;
   $admissionsSection = $sections['admissions'] ?? null;
   $testimonialsSection = $sections['testimonials'] ?? null;
   $newsSection = $sections['news'] ?? null;
   $eventsSection = $sections['events'] ?? null;
+  $campusFacilitiesSection = $sections['campus_facilities'] ?? null;
   $showPrograms = !$programsSection || $programsSection->is_active;
   $showStudentLife = !$studentLifeSection || $studentLifeSection->is_active;
+  $landingStudentLifeTitle = $studentLifeLandingSetting?->title ?? $studentLifeSection?->title ?? 'Students Life';
+  $landingStudentLifeSubtitle = $studentLifeLandingSetting?->subtitle ?? $studentLifeSection?->subtitle ?? '';
+  $showFacultyHighlights = !$facultyHighlightsSection || $facultyHighlightsSection->is_active;
   $showTestimonials = !$testimonialsSection || $testimonialsSection->is_active;
   $showStats = !$statsSection || $statsSection->is_active;
   $showNews = !$newsSection || $newsSection->is_active;
   $showEvents = !$eventsSection || $eventsSection->is_active;
   $showAdmissions = !$admissionsSection || $admissionsSection->is_active;
+  $showCampusFacilities = !$campusFacilitiesSection || $campusFacilitiesSection->is_active;
 @endphp
 
 <main class="main">
@@ -183,6 +189,69 @@
   </section>
   @endif
 
+  @if($showCampusFacilities && ($campusHighlights->isNotEmpty() || $campusCategories->isNotEmpty()))
+  <section id="campus-facilities" class="campus-facilities section">
+    <div class="container section-title" data-aos="fade-up">
+      <h2>{{ $campusFacilitiesSection->title ?? 'Campus Facilities' }}</h2>
+      <p>{{ $campusFacilitiesSection->subtitle ?? 'Explore our modern spaces and student services.' }}</p>
+    </div>
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      @if($campusHighlights->isNotEmpty())
+        <div class="row g-4">
+          @foreach($campusHighlights as $highlight)
+            <div class="col-md-6 col-lg-4">
+              <div class="card h-100 shadow-sm border-0">
+                @if($highlight->image)
+                  <img src="{{ asset(ltrim($highlight->image, '/')) }}" alt="{{ $highlight->title }}" class="card-img-top">
+                @endif
+                <div class="card-body">
+                  @if($highlight->category_label)
+                    <span class="badge bg-light text-muted mb-2">{{ $highlight->category_label }}</span>
+                  @endif
+                  <h5 class="card-title">{{ $highlight->title }}</h5>
+                  <p class="card-text">{{ $highlight->description }}</p>
+                  <div class="d-flex flex-column gap-2 small text-muted">
+                    @if($highlight->stat_one_label)
+                      <span><i class="{{ $highlight->stat_one_icon ?? 'bi bi-star' }}"></i> {{ $highlight->stat_one_label }}</span>
+                    @endif
+                    @if($highlight->stat_two_label)
+                      <span><i class="{{ $highlight->stat_two_icon ?? 'bi bi-star' }}"></i> {{ $highlight->stat_two_label }}</span>
+                    @endif
+                  </div>
+                </div>
+              </div>
+            </div>
+          @endforeach
+        </div>
+      @endif
+
+      @if($campusCategories->isNotEmpty())
+        <div class="row g-3 mt-4">
+          @foreach($campusCategories as $category)
+            <div class="col-md-4">
+              <div class="p-4 border rounded h-100">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="{{ $category->icon_class ?? 'bi bi-building' }}"></i>
+                  <h5 class="mb-0">{{ $category->name }}</h5>
+                </div>
+                <p class="text-muted mb-3">{{ $category->description }}</p>
+                <a href="{{ $category->button_url ?? route('college.campus-facilities') }}" class="text-decoration-underline">
+                  {{ $category->button_label ?? 'Explore Facilities' }}
+                </a>
+              </div>
+            </div>
+          @endforeach
+        </div>
+      @endif
+
+      <div class="mt-4">
+        <a href="{{ route('college.campus-facilities') }}" class="btn btn-primary">Explore Campus Facilities</a>
+      </div>
+    </div>
+  </section>
+  @endif
+
   @if($showPrograms)
   <section id="featured-programs" class="featured-programs section">
     <div class="container section-title" data-aos="fade-up">
@@ -270,6 +339,46 @@
   </section>
   @endif
 
+  @if($showFacultyHighlights && $facultyHighlights->isNotEmpty())
+  <section id="faculty-highlights" class="faculty section">
+    <div class="container section-title" data-aos="fade-up">
+      <h2>{{ $facultyHighlightsSection->title ?? 'Meet Our Faculty' }}</h2>
+      <p>{{ $facultyHighlightsSection->subtitle ?? '' }}</p>
+    </div>
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row g-4">
+        @foreach($facultyHighlights as $highlight)
+          <div class="col-lg-3 col-md-6" data-aos="fade-up">
+            <div class="faculty-card">
+              <div class="faculty-img">
+                @if($highlight->image)
+                  <img src="{{ asset(ltrim($highlight->image, '/')) }}" alt="{{ $highlight->name }}" class="img-fluid">
+                @endif
+              </div>
+              <div class="faculty-content">
+                <h4>{{ $highlight->name }}</h4>
+                <p class="faculty-position">{{ $highlight->role }}</p>
+                <div class="faculty-social">
+                  @if($highlight->linkedin_url)
+                    <a href="{{ $highlight->linkedin_url }}" target="_blank" rel="noopener"><i class="bi bi-linkedin"></i></a>
+                  @endif
+                  @if($highlight->twitter_url)
+                    <a href="{{ $highlight->twitter_url }}" target="_blank" rel="noopener"><i class="bi bi-twitter"></i></a>
+                  @endif
+                  @if($highlight->email)
+                    <a href="mailto:{{ $highlight->email }}"><i class="bi bi-envelope"></i></a>
+                  @endif
+                </div>
+              </div>
+            </div>
+          </div>
+        @endforeach
+      </div>
+    </div>
+  </section>
+  @endif
+
   @if($showAdmissions && ($admissionsSteps->isNotEmpty() || $admissionsRequirements->isNotEmpty() || $admissionsDeadlines->isNotEmpty()))
   <section id="admissions" class="admissions section">
     <div class="container section-title" data-aos="fade-up">
@@ -320,8 +429,8 @@
   @if($showStudentLife)
   <section id="students-life-block" class="students-life-block section">
     <div class="container section-title" data-aos="fade-up">
-      <h2>{{ $studentLifeSection->title ?? 'Students Life' }}</h2>
-      <p>{{ $studentLifeSection->subtitle ?? '' }}</p>
+    <h2>{{ $landingStudentLifeTitle }}</h2>
+    <p>{{ $landingStudentLifeSubtitle }}</p>
     </div>
 
     <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -461,11 +570,15 @@
                 @endif
               </div>
               <div class="post-content flex-grow-1">
-                <a href="{{ $item->link_url ?? '#' }}" class="category">{{ $item->category }}</a>
+                @if($item->category)
+                  <a href="{{ route('college.news') }}?category={{ urlencode($item->category) }}" class="category">{{ $item->category }}</a>
+                @endif
                 <h2 class="post-title">
-                  <a href="{{ $item->link_url ?? '#' }}">{{ $item->title }}</a>
+                  <a href="{{ route('college.news.show', $item) }}">{{ $item->title }}</a>
                 </h2>
-                <p class="post-description">{{ $item->excerpt }}</p>
+                @if($item->excerpt)
+                  <p class="post-description">{{ $item->excerpt }}</p>
+                @endif
                 <div class="post-meta">
                   <div class="post-author">
                     @if($item->author_image)
@@ -500,29 +613,41 @@
                 @if($event->image)
                   <img src="{{ asset(ltrim($event->image, '/')) }}" alt="Event" class="img-fluid">
                 @endif
-                <div class="event-date-overlay">
-                  <span class="date">{{ $event->date_month }}<br>{{ $event->date_day }}</span>
-                </div>
+                @if($event->event_date)
+                  <div class="event-date-overlay">
+                    <span class="date">{{ $event->event_date->format('M') }}<br>{{ $event->event_date->format('d') }}</span>
+                  </div>
+                @endif
               </div>
               <div class="event-details">
                 <div class="event-category">
-                  <span class="badge academic">{{ $event->category }}</span>
-                  <span class="event-time">{{ $event->time_text }}</span>
+                  @if($event->category)
+                    <span class="badge academic">{{ $event->category }}</span>
+                  @endif
+                  @if($event->event_time)
+                    <span class="event-time">{{ $event->event_time }}</span>
+                  @endif
                 </div>
                 <h3>{{ $event->title }}</h3>
-                <p>{{ $event->description }}</p>
+                @if($event->description)
+                  <p>{{ Str::limit($event->description, 100) }}</p>
+                @endif
                 <div class="event-info">
-                  <div class="info-row">
-                    <i class="bi bi-geo-alt"></i>
-                    <span>{{ $event->location }}</span>
-                  </div>
-                  <div class="info-row">
-                    <i class="bi bi-people"></i>
-                    <span>{{ $event->participants }}</span>
-                  </div>
+                  @if($event->location)
+                    <div class="info-row">
+                      <i class="bi bi-geo-alt"></i>
+                      <span>{{ $event->location }}</span>
+                    </div>
+                  @endif
+                  @if($event->participants)
+                    <div class="info-row">
+                      <i class="bi bi-people"></i>
+                      <span>{{ $event->participants }}</span>
+                    </div>
+                  @endif
                 </div>
                 <div class="event-footer">
-                  <a href="{{ $event->link_url ?? '#' }}" class="register-btn">Register Now</a>
+                  <a href="{{ route('college.events.show', $event) }}" class="register-btn">Learn More</a>
                   <div class="event-share">
                     <i class="bi bi-share"></i>
                     <i class="bi bi-heart"></i>

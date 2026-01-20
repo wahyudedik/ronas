@@ -21,328 +21,118 @@
 
     <!-- News Hero Section -->
     <section id="news-hero" class="news-hero section">
-
       <div class="container" data-aos="fade-up" data-aos-delay="100">
-
         <div class="row g-4">
           <!-- Main Content Area -->
           <div class="col-lg-8">
-            <!-- Featured Article -->
-            <article class="featured-post position-relative mb-4" data-aos="fade-up">
-              <img src="/College/assets/img/blog/blog-hero-9.webp" alt="Featured post" class="img-fluid">
-              <div class="post-overlay">
-                <div class="post-content">
-                  <div class="post-meta">
-                    <span class="category">Politics</span>
-                    <span class="date">02/15/2024</span>
-                  </div>
-                  <h2 class="post-title">
-                    <a href="#">Optimizing Strategic Initiatives Through Cross-Functional Collaboration</a>
-                  </h2>
-                  <p class="post-excerpt">Leveraging core competencies to drive sustainable growth and maximize stakeholder value through innovative solutions and market-driven approaches.</p>
-                  <div class="post-author">
-                    <span>by</span>
-                    <a href="#">Jennifer Mitchell</a>
+            @if($news->count() > 0)
+              @php
+                $featuredNews = $news->first();
+                $otherNews = $news->skip(1)->take(2);
+              @endphp
+              <!-- Featured Article -->
+              <article class="featured-post position-relative mb-4" data-aos="fade-up">
+                @if($featuredNews->image)
+                  <img src="{{ asset(ltrim($featuredNews->image, '/')) }}" alt="{{ $featuredNews->title }}" class="img-fluid">
+                @else
+                  <img src="/College/assets/img/blog/blog-hero-9.webp" alt="Featured post" class="img-fluid">
+                @endif
+                <div class="post-overlay">
+                  <div class="post-content">
+                    <div class="post-meta">
+                      @if($featuredNews->category)
+                        <span class="category">{{ $featuredNews->category }}</span>
+                      @endif
+                      @if($featuredNews->published_at)
+                        <span class="date">{{ $featuredNews->published_at->format('m/d/Y') }}</span>
+                      @endif
+                    </div>
+                    <h2 class="post-title">
+                      <a href="{{ route('college.news.show', $featuredNews) }}">{{ $featuredNews->title }}</a>
+                    </h2>
+                    @if($featuredNews->excerpt)
+                      <p class="post-excerpt">{{ $featuredNews->excerpt }}</p>
+                    @endif
+                    @if($featuredNews->author_name)
+                      <div class="post-author">
+                        <span>by</span>
+                        <a href="#">{{ $featuredNews->author_name }}</a>
+                      </div>
+                    @endif
                   </div>
                 </div>
-              </div>
-            </article>
+              </article>
 
-            <!-- Secondary Articles -->
-            <div class="row g-4">
-              <div class="col-md-6">
-                <article class="secondary-post" data-aos="fade-up">
-                  <div class="post-image">
-                    <img src="/College/assets/img/blog/blog-post-1.webp" alt="Post" class="img-fluid">
-                  </div>
-                  <div class="post-content">
-                    <div class="post-meta">
-                      <span class="category">Politics</span>
-                      <span class="date">03/21/2024</span>
+              <!-- Secondary Articles -->
+              @if($otherNews->count() > 0)
+                <div class="row g-4">
+                  @foreach($otherNews as $index => $item)
+                    <div class="col-md-6">
+                      <article class="secondary-post" data-aos="fade-up" data-aos-delay="{{ ($index + 1) * 100 }}">
+                        <div class="post-image">
+                          @if($item->image)
+                            <img src="{{ asset(ltrim($item->image, '/')) }}" alt="{{ $item->title }}" class="img-fluid">
+                          @else
+                            <img src="/College/assets/img/blog/blog-post-{{ $index + 1 }}.webp" alt="Post" class="img-fluid">
+                          @endif
+                        </div>
+                        <div class="post-content">
+                          <div class="post-meta">
+                            @if($item->category)
+                              <span class="category">{{ $item->category }}</span>
+                            @endif
+                            @if($item->published_at)
+                              <span class="date">{{ $item->published_at->format('m/d/Y') }}</span>
+                            @endif
+                          </div>
+                          <h3 class="post-title">
+                            <a href="{{ route('college.news.show', $item) }}">{{ $item->title }}</a>
+                          </h3>
+                          @if($item->author_name)
+                            <div class="post-author">
+                              <span>by</span>
+                              <a href="#">{{ $item->author_name }}</a>
+                            </div>
+                          @endif
+                        </div>
+                      </article>
                     </div>
-                    <h3 class="post-title">
-                      <a href="#">Implementing Agile Methodologies for Enhanced Business Performance</a>
-                    </h3>
-                    <div class="post-author">
-                      <span>by</span>
-                      <a href="#">Robert Anderson</a>
-                    </div>
-                  </div>
-                </article>
-              </div>
-              <div class="col-md-6">
-                <article class="secondary-post" data-aos="fade-up" data-aos-delay="100">
-                  <div class="post-image">
-                    <img src="/College/assets/img/blog/blog-post-2.webp" alt="Post" class="img-fluid">
-                  </div>
-                  <div class="post-content">
-                    <div class="post-meta">
-                      <span class="category">Business</span>
-                      <span class="date">01/30/2024</span>
-                    </div>
-                    <h3 class="post-title">
-                      <a href="#">Streamlining Operations Through Digital Transformation Solutions</a>
-                    </h3>
-                    <div class="post-author">
-                      <span>by</span>
-                      <a href="#">Sarah Thompson</a>
-                    </div>
-                  </div>
-                </article>
-              </div>
-            </div>
+                  @endforeach
+                </div>
+              @endif
+            @endif
           </div><!-- End Main Content Area -->
 
-          <!-- Sidebar with Tabs -->
+          <!-- Sidebar -->
           <div class="col-lg-4">
             <div class="news-tabs" data-aos="fade-up" data-aos-delay="200">
-              <ul class="nav nav-tabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#top-stories" type="button">Top stories</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#trending" type="button">Trending News</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#latest" type="button">Latest News</button>
-                </li>
-              </ul>
-
-              <div class="tab-content">
-                <!-- Top Stories Tab -->
-                <div class="tab-pane fade show active" id="top-stories">
-                  <article class="tab-post">
+              <h4 class="mb-3">Latest News</h4>
+              @if($news->count() > 0)
+                @foreach($news->take(5) as $item)
+                  <article class="tab-post mb-3">
                     <div class="row g-0 align-items-center">
-                      <div class="col-4">
-                        <img src="/College/assets/img/blog/blog-post-square-1.webp" alt="Post" class="img-fluid">
-                      </div>
-                      <div class="col-8">
+                      @if($item->image)
+                        <div class="col-4">
+                          <img src="{{ asset(ltrim($item->image, '/')) }}" alt="{{ $item->title }}" class="img-fluid">
+                        </div>
+                      @endif
+                      <div class="{{ $item->image ? 'col-8' : 'col-12' }}">
                         <div class="post-content">
-                          <span class="category">Science</span>
-                          <h4 class="post-title"><a href="#">Maximizing ROI Through Strategic Resource Allocation</a></h4>
-                          <div class="post-author">by <a href="#">Michael Davidson</a></div>
+                          @if($item->category)
+                            <span class="category">{{ $item->category }}</span>
+                          @endif
+                          <h4 class="post-title">
+                            <a href="{{ route('college.news.show', $item) }}">{{ Str::limit($item->title, 50) }}</a>
+                          </h4>
+                          @if($item->author_name)
+                            <div class="post-author">by <a href="#">{{ $item->author_name }}</a></div>
+                          @endif
                         </div>
                       </div>
                     </div>
                   </article>
-
-                  <article class="tab-post">
-                    <div class="row g-0 align-items-center">
-                      <div class="col-4">
-                        <img src="/College/assets/img/blog/blog-post-square-2.webp" alt="Post" class="img-fluid">
-                      </div>
-                      <div class="col-8">
-                        <div class="post-content">
-                          <span class="category">Travel</span>
-                          <h4 class="post-title"><a href="#">Leveraging Big Data Analytics for Market Intelligence</a></h4>
-                          <div class="post-author">by <a href="#">Emily Richardson</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-
-                  <article class="tab-post">
-                    <div class="row g-0 align-items-center">
-                      <div class="col-4">
-                        <img src="/College/assets/img/blog/blog-post-square-3.webp" alt="Post" class="img-fluid">
-                      </div>
-                      <div class="col-8">
-                        <div class="post-content">
-                          <span class="category">Politics</span>
-                          <h4 class="post-title"><a href="#">Enhancing Customer Experience Through Digital Innovation</a></h4>
-                          <div class="post-author">by <a href="#">Daniel Cooper</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-
-                  <article class="tab-post">
-                    <div class="row g-0 align-items-center">
-                      <div class="col-4">
-                        <img src="/College/assets/img/blog/blog-post-square-4.webp" alt="Post" class="img-fluid">
-                      </div>
-                      <div class="col-8">
-                        <div class="post-content">
-                          <span class="category">Technology</span>
-                          <h4 class="post-title"><a href="#">Transforming Business Models Through Digital Innovation</a></h4>
-                          <div class="post-author">by <a href="#">Rachel Stevens</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-
-                  <article class="tab-post">
-                    <div class="row g-0 align-items-center">
-                      <div class="col-4">
-                        <img src="/College/assets/img/blog/blog-post-square-5.webp" alt="Post" class="img-fluid">
-                      </div>
-                      <div class="col-8">
-                        <div class="post-content">
-                          <span class="category">Finance</span>
-                          <h4 class="post-title"><a href="#">Strategic Investment Planning for Sustainable Growth</a></h4>
-                          <div class="post-author">by <a href="#">Andrew Phillips</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                </div>
-
-                <!-- Trending News Tab -->
-                <div class="tab-pane fade" id="trending">
-                  <article class="tab-post">
-                    <div class="row g-0 align-items-center">
-                      <div class="col-4">
-                        <img src="/College/assets/img/blog/blog-post-square-4.webp" alt="Post" class="img-fluid">
-                      </div>
-                      <div class="col-8">
-                        <div class="post-content">
-                          <span class="category">Science</span>
-                          <h4 class="post-title"><a href="#">Implementing Sustainable Business Practices for Long-term Growth</a></h4>
-                          <div class="post-author">by <a href="#">Alexandra Foster</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-
-                  <article class="tab-post">
-                    <div class="row g-0 align-items-center">
-                      <div class="col-4">
-                        <img src="/College/assets/img/blog/blog-post-square-5.webp" alt="Post" class="img-fluid">
-                      </div>
-                      <div class="col-8">
-                        <div class="post-content">
-                          <span class="category">Style</span>
-                          <h4 class="post-title"><a href="#">Optimizing Supply Chain Management Through Technology Integration</a></h4>
-                          <div class="post-author">by <a href="#">Christopher Wells</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-
-                  <article class="tab-post">
-                    <div class="row g-0 align-items-center">
-                      <div class="col-4">
-                        <img src="/College/assets/img/blog/blog-post-square-6.webp" alt="Post" class="img-fluid">
-                      </div>
-                      <div class="col-8">
-                        <div class="post-content">
-                          <span class="category">Politics</span>
-                          <h4 class="post-title"><a href="#">Developing Strategic Partnerships for Market Expansion</a></h4>
-                          <div class="post-author">by <a href="#">Victoria Palmer</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-
-                  <article class="tab-post">
-                    <div class="row g-0 align-items-center">
-                      <div class="col-4">
-                        <img src="/College/assets/img/blog/blog-post-square-7.webp" alt="Post" class="img-fluid">
-                      </div>
-                      <div class="col-8">
-                        <div class="post-content">
-                          <span class="category">Marketing</span>
-                          <h4 class="post-title"><a href="#">Enhancing Brand Value Through Customer-Centric Strategies</a></h4>
-                          <div class="post-author">by <a href="#">Sophia Rodriguez</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-
-                  <article class="tab-post">
-                    <div class="row g-0 align-items-center">
-                      <div class="col-4">
-                        <img src="/College/assets/img/blog/blog-post-square-8.webp" alt="Post" class="img-fluid">
-                      </div>
-                      <div class="col-8">
-                        <div class="post-content">
-                          <span class="category">Leadership</span>
-                          <h4 class="post-title"><a href="#">Building High-Performance Teams in Dynamic Environments</a></h4>
-                          <div class="post-author">by <a href="#">Nathan Brooks</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                </div>
-
-                <!-- Latest News Tab -->
-                <div class="tab-pane fade" id="latest">
-                  <article class="tab-post">
-                    <div class="row g-0 align-items-center">
-                      <div class="col-4">
-                        <img src="/College/assets/img/blog/blog-post-square-7.webp" alt="Post" class="img-fluid">
-                      </div>
-                      <div class="col-8">
-                        <div class="post-content">
-                          <span class="category">Health</span>
-                          <h4 class="post-title"><a href="#">Accelerating Innovation Through Cross-functional Collaboration</a></h4>
-                          <div class="post-author">by <a href="#">Benjamin Carter</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-
-                  <article class="tab-post">
-                    <div class="row g-0 align-items-center">
-                      <div class="col-4">
-                        <img src="/College/assets/img/blog/blog-post-square-8.webp" alt="Post" class="img-fluid">
-                      </div>
-                      <div class="col-8">
-                        <div class="post-content">
-                          <span class="category">Business</span>
-                          <h4 class="post-title"><a href="#">Driving Business Growth Through Strategic Digital Initiatives</a></h4>
-                          <div class="post-author">by <a href="#">Olivia Martinez</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-
-                  <article class="tab-post">
-                    <div class="row g-0 align-items-center">
-                      <div class="col-4">
-                        <img src="/College/assets/img/blog/blog-post-square-9.webp" alt="Post" class="img-fluid">
-                      </div>
-                      <div class="col-8">
-                        <div class="post-content">
-                          <span class="category">Sports</span>
-                          <h4 class="post-title"><a href="#">Maximizing Operational Efficiency Through Process Optimization</a></h4>
-                          <div class="post-author">by <a href="#">William Turner</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-
-                  <article class="tab-post">
-                    <div class="row g-0 align-items-center">
-                      <div class="col-4">
-                        <img src="/College/assets/img/blog/blog-post-square-10.webp" alt="Post" class="img-fluid">
-                      </div>
-                      <div class="col-8">
-                        <div class="post-content">
-                          <span class="category">Innovation</span>
-                          <h4 class="post-title"><a href="#">Leveraging AI Solutions for Business Process Automation</a></h4>
-                          <div class="post-author">by <a href="#">Isabella Clark</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-
-                  <article class="tab-post">
-                    <div class="row g-0 align-items-center">
-                      <div class="col-4">
-                        <img src="/College/assets/img/blog/blog-post-square-6.webp" alt="Post" class="img-fluid">
-                      </div>
-                      <div class="col-8">
-                        <div class="post-content">
-                          <span class="category">Strategy</span>
-                          <h4 class="post-title"><a href="#">Implementing Agile Framework for Project Management Excellence</a></h4>
-                          <div class="post-author">by <a href="#">Marcus Henderson</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                </div>
-              </div>
+                @endforeach
+              @endif
             </div>
           </div>
         </div>
@@ -351,127 +141,65 @@
 
     <!-- News Posts Section -->
     <section id="news-posts" class="news-posts section">
-
       <div class="container">
-
         <div class="row gy-4">
-
-          <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <article>
-
-              <div class="post-img">
-                <img src="/College/assets/img/blog/blog-post-1.webp" alt="" class="img-fluid">
-              </div>
-
-              <p class="post-category">Politics</p>
-
-              <h2 class="title">
-                <a href="blog-details.html">Dolorum optio tempore voluptas dignissimos</a>
-              </h2>
-
-              <div class="d-flex align-items-center">
-                <img src="/College/assets/img/person/person-f-12.webp" alt="" class="img-fluid post-author-img flex-shrink-0">
-                <div class="post-meta">
-                  <p class="post-author">Maria Doe</p>
-                  <p class="post-date">
-                    <time datetime="2022-01-01">Jan 1, 2022</time>
-                  </p>
+          @forelse($news as $index => $item)
+            <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ ($index % 3 + 1) * 100 }}">
+              <article>
+                <div class="post-img">
+                  @if($item->image)
+                    <img src="{{ asset(ltrim($item->image, '/')) }}" alt="{{ $item->title }}" class="img-fluid">
+                  @else
+                    <img src="/College/assets/img/blog/blog-post-{{ ($index % 9) + 1 }}.webp" alt="" class="img-fluid">
+                  @endif
                 </div>
-              </div>
 
-            </article>
-          </div><!-- End post list item -->
+                @if($item->category)
+                  <p class="post-category">{{ $item->category }}</p>
+                @endif
 
-          <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-            <article>
+                <h2 class="title">
+                  <a href="{{ route('college.news.show', $item) }}">{{ $item->title }}</a>
+                </h2>
 
-              <div class="post-img">
-                <img src="/College/assets/img/blog/blog-post-2.webp" alt="" class="img-fluid">
-              </div>
-
-              <p class="post-category">Sports</p>
-
-              <h2 class="title">
-                <a href="blog-details.html">Nisi magni odit consequatur autem nulla dolorem</a>
-              </h2>
-
-              <div class="d-flex align-items-center">
-                <img src="/College/assets/img/person/person-f-13.webp" alt="" class="img-fluid post-author-img flex-shrink-0">
-                <div class="post-meta">
-                  <p class="post-author">Allisa Mayer</p>
-                  <p class="post-date">
-                    <time datetime="2022-01-01">Jun 5, 2022</time>
-                  </p>
+                <div class="d-flex align-items-center">
+                  @if($item->author_image)
+                    <img src="{{ asset(ltrim($item->author_image, '/')) }}" alt="{{ $item->author_name }}" class="img-fluid post-author-img flex-shrink-0">
+                  @elseif($item->author_name)
+                    <img src="/College/assets/img/person/person-f-{{ ($index % 3) + 12 }}.webp" alt="" class="img-fluid post-author-img flex-shrink-0">
+                  @endif
+                  <div class="post-meta">
+                    @if($item->author_name)
+                      <p class="post-author">{{ $item->author_name }}</p>
+                    @endif
+                    @if($item->published_at)
+                      <p class="post-date">
+                        <time datetime="{{ $item->published_at->format('Y-m-d') }}">{{ $item->published_at->format('M d, Y') }}</time>
+                      </p>
+                    @endif
+                  </div>
                 </div>
-              </div>
-
-            </article>
-          </div><!-- End post list item -->
-
-          <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-            <article>
-
-              <div class="post-img">
-                <img src="/College/assets/img/blog/blog-post-3.webp" alt="" class="img-fluid">
-              </div>
-
-              <p class="post-category">Entertainment</p>
-
-              <h2 class="title">
-                <a href="blog-details.html">Possimus soluta ut id suscipit ea ut in quo quia et soluta</a>
-              </h2>
-
-              <div class="d-flex align-items-center">
-                <img src="/College/assets/img/person/person-m-10.webp" alt="" class="img-fluid post-author-img flex-shrink-0">
-                <div class="post-meta">
-                  <p class="post-author">Mark Dower</p>
-                  <p class="post-date">
-                    <time datetime="2022-01-01">Jun 22, 2022</time>
-                  </p>
-                </div>
-              </div>
-
-            </article>
-          </div><!-- End post list item -->
-
-        </div><!-- End recent posts list -->
-
+              </article>
+            </div>
+          @empty
+            <div class="col-12">
+              <p class="text-center">No news available at the moment.</p>
+            </div>
+          @endforelse
+        </div>
       </div>
-
     </section><!-- /News Posts Section -->
 
-    <!-- Pagination 2 Section -->
-    <section id="pagination-2" class="pagination-2 section">
+    <!-- Pagination Section -->
+    @if($news->hasPages())
+      <section id="pagination-2" class="pagination-2 section">
+        <div class="container">
+          <nav class="d-flex justify-content-center" aria-label="Page navigation">
+            {{ $news->links() }}
+          </nav>
+        </div>
+      </section>
+    @endif
 
-      <div class="container">
-        <nav class="d-flex justify-content-center" aria-label="Page navigation">
-          <ul>
-            <li>
-              <a href="#" aria-label="Previous page">
-                <i class="bi bi-arrow-left"></i>
-                <span class="d-none d-sm-inline">Previous</span>
-              </a>
-            </li>
-
-            <li><a href="#" class="active">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li class="ellipsis">...</li>
-            <li><a href="#">8</a></li>
-            <li><a href="#">9</a></li>
-            <li><a href="#">10</a></li>
-
-            <li>
-              <a href="#" aria-label="Next page">
-                <span class="d-none d-sm-inline">Next</span>
-                <i class="bi bi-arrow-right"></i>
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-
-    </section><!-- /Pagination 2 Section -->
-
-  </main>
+</main>
 @endsection

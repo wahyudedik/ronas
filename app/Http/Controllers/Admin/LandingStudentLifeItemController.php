@@ -30,6 +30,21 @@ class LandingStudentLifeItemController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $this->validateItem($request);
+
+        if (($validated['category'] ?? '') === 'gallery' && $request->hasFile('gallery_images')) {
+            foreach ($request->file('gallery_images') as $file) {
+                $itemData = $validated;
+                $path = $file->store('landing', 'public');
+                $itemData['image'] = 'storage/' . $path;
+                $itemData['title'] = $validated['title'] !== '' ? $validated['title'] : 'Gallery Item';
+                LandingStudentLifeItem::create($itemData);
+            }
+
+            return redirect()
+                ->route('admin.landing.student-life.index')
+                ->with('status', 'Gallery items saved.');
+        }
+
         $this->handleImageUpload($request, $validated);
         LandingStudentLifeItem::create($validated);
 
@@ -104,8 +119,13 @@ class LandingStudentLifeItemController extends Controller
     {
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'category' => ['required', 'in:organizations,athletics,facilities,support_services,gallery'],
             'description' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'max:2048'],
+            'gallery_images' => ['nullable', 'array'],
+            'gallery_images.*' => ['image', 'max:2048'],
+            'icon_class' => ['nullable', 'string', 'max:100'],
+            'badge_text' => ['nullable', 'string', 'max:50'],
             'link_label' => ['nullable', 'string', 'max:100'],
             'link_url' => ['nullable', 'string', 'max:255'],
             'sort_order' => ['nullable', 'integer'],

@@ -26,6 +26,10 @@ class UserSeeder extends Seeder
             'manage landing',
             'manage about',
             'manage admissions',
+            'manage academics',
+            'manage facilities',
+            'manage news',
+            'manage events',
         ];
 
         foreach ($permissions as $permission) {
@@ -38,7 +42,15 @@ class UserSeeder extends Seeder
         $userRole = Role::findOrCreate('user', 'web');
 
         $adminRole->syncPermissions($permissions);
-        $userRole->syncPermissions([]);
+        $userRole->syncPermissions([
+            'manage landing',
+            'manage about',
+            'manage admissions',
+            'manage academics',
+            'manage facilities',
+            'manage news',
+            'manage events',
+        ]);
 
         $adminEmail = env('ADMIN_EMAIL', 'admin@gmail.com');
         $adminPassword = env('ADMIN_PASSWORD', 'password');

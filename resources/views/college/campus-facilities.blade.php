@@ -72,370 +72,223 @@
         </div>
 
         <!-- Facilities Categories Grid -->
-        <div class="facilities-grid" data-aos="fade-up" data-aos-delay="200">
-          <div class="category-card academic" data-aos="zoom-in" data-aos-delay="100">
-            <div class="card-header">
-              <div class="icon-wrapper">
-                <i class="bi bi-book"></i>
+        @if($categories->isNotEmpty())
+          <div class="facilities-grid" data-aos="fade-up" data-aos-delay="200">
+            @foreach($categories as $index => $category)
+              <div class="category-card {{ $category->theme }}" data-aos="zoom-in" data-aos-delay="{{ 100 + ($index * 100) }}">
+                <div class="card-header">
+                  <div class="icon-wrapper">
+                    <i class="{{ $category->icon_class ?? 'bi bi-building' }}"></i>
+                  </div>
+                  <h3>{{ $category->name }}</h3>
+                </div>
+                <div class="card-content">
+                  <div class="facility-image">
+                    @if($category->image)
+                      <img src="{{ asset(ltrim($category->image, '/')) }}" alt="{{ $category->name }}" class="img-fluid">
+                    @endif
+                  </div>
+                  @if($category->items->isNotEmpty())
+                    <div class="facility-list">
+                      @foreach($category->items as $item)
+                        <div class="facility-item">
+                          <i class="{{ $item->icon_class ?? 'bi bi-check2-circle' }}"></i>
+                          <span>{{ $item->label }}</span>
+                        </div>
+                      @endforeach
+                    </div>
+                  @endif
+                </div>
+                <div class="card-footer">
+                  <a href="{{ $category->button_url ?? '#' }}" class="explore-btn">
+                    {{ $category->button_label ?? 'Explore' }} <i class="bi bi-arrow-right"></i>
+                  </a>
+                </div>
               </div>
-              <h3>Academic Facilities</h3>
-            </div>
-            <div class="card-content">
-              <div class="facility-image">
-                <img src="/College/assets/img/education/campus-7.webp" alt="Academic Building" class="img-fluid">
-              </div>
-              <div class="facility-list">
-                <div class="facility-item">
-                  <i class="bi bi-check2-circle"></i>
-                  <span>Advanced Research Labs</span>
-                </div>
-                <div class="facility-item">
-                  <i class="bi bi-check2-circle"></i>
-                  <span>Smart Classrooms</span>
-                </div>
-                <div class="facility-item">
-                  <i class="bi bi-check2-circle"></i>
-                  <span>Digital Library</span>
-                </div>
-                <div class="facility-item">
-                  <i class="bi bi-check2-circle"></i>
-                  <span>Study Lounges</span>
-                </div>
-              </div>
-            </div>
-            <div class="card-footer">
-              <a href="#" class="explore-btn">Explore Academic <i class="bi bi-arrow-right"></i></a>
-            </div>
+            @endforeach
           </div>
-
-          <div class="category-card sports" data-aos="zoom-in" data-aos-delay="200">
-            <div class="card-header">
-              <div class="icon-wrapper">
-                <i class="bi bi-trophy"></i>
-              </div>
-              <h3>Sports Complex</h3>
-            </div>
-            <div class="card-content">
-              <div class="facility-image">
-                <img src="/College/assets/img/education/campus-8.webp" alt="Sports Complex" class="img-fluid">
-              </div>
-              <div class="facility-list">
-                <div class="facility-item">
-                  <i class="bi bi-check2-circle"></i>
-                  <span>Olympic Pool</span>
-                </div>
-                <div class="facility-item">
-                  <i class="bi bi-check2-circle"></i>
-                  <span>Gymnasium</span>
-                </div>
-                <div class="facility-item">
-                  <i class="bi bi-check2-circle"></i>
-                  <span>Tennis Courts</span>
-                </div>
-                <div class="facility-item">
-                  <i class="bi bi-check2-circle"></i>
-                  <span>Fitness Center</span>
-                </div>
-              </div>
-            </div>
-            <div class="card-footer">
-              <a href="#" class="explore-btn">Explore Sports <i class="bi bi-arrow-right"></i></a>
-            </div>
-          </div>
-
-          <div class="category-card residence" data-aos="zoom-in" data-aos-delay="300">
-            <div class="card-header">
-              <div class="icon-wrapper">
-                <i class="bi bi-house-heart"></i>
-              </div>
-              <h3>Living Spaces</h3>
-            </div>
-            <div class="card-content">
-              <div class="facility-image">
-                <img src="/College/assets/img/education/campus-9.webp" alt="Student Housing" class="img-fluid">
-              </div>
-              <div class="facility-list">
-                <div class="facility-item">
-                  <i class="bi bi-check2-circle"></i>
-                  <span>Modern Dormitories</span>
-                </div>
-                <div class="facility-item">
-                  <i class="bi bi-check2-circle"></i>
-                  <span>Common Areas</span>
-                </div>
-                <div class="facility-item">
-                  <i class="bi bi-check2-circle"></i>
-                  <span>Dining Halls</span>
-                </div>
-                <div class="facility-item">
-                  <i class="bi bi-check2-circle"></i>
-                  <span>Recreation Rooms</span>
-                </div>
-              </div>
-            </div>
-            <div class="card-footer">
-              <a href="#" class="explore-btn">Explore Housing <i class="bi bi-arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
+        @endif
 
         <!-- Interactive Campus Tour -->
-        <div class="campus-tour-section" data-aos="fade-up" data-aos-delay="100">
-          <div class="row align-items-center">
-            <div class="col-lg-6" data-aos="fade-right" data-aos-delay="200">
-              <div class="tour-content">
-                <h2>Take a Virtual Campus Tour</h2>
-                <p>Cras ultricies ligula sed magna dictum porta. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vivamus suscipit tortor eget felis porttitor volutpat.</p>
-                <div class="tour-features">
-                  <div class="tour-feature">
-                    <i class="bi bi-binoculars"></i>
-                    <div>
-                      <strong>360° Views</strong>
-                      <p>Immersive campus experience</p>
+        @if($virtualTour)
+          <div class="campus-tour-section" data-aos="fade-up" data-aos-delay="100">
+            <div class="row align-items-center">
+              <div class="col-lg-6" data-aos="fade-right" data-aos-delay="200">
+                <div class="tour-content">
+                  <h2>{{ $virtualTour->title ?? 'Take a Virtual Campus Tour' }}</h2>
+                  <p>{{ $virtualTour->description }}</p>
+                  @if($virtualTourFeatures->isNotEmpty())
+                    <div class="tour-features">
+                      @foreach($virtualTourFeatures as $feature)
+                        <div class="tour-feature">
+                          <i class="{{ $feature->icon_class ?? 'bi bi-info-circle' }}"></i>
+                          <div>
+                            <strong>{{ $feature->title }}</strong>
+                            <p>{{ $feature->description }}</p>
+                          </div>
+                        </div>
+                      @endforeach
                     </div>
+                  @endif
+                  <div class="tour-actions">
+                    @if($virtualTour->primary_label)
+                      <a href="{{ $virtualTour->primary_url ?? '#' }}" class="btn-primary">{{ $virtualTour->primary_label }}</a>
+                    @endif
+                    @if($virtualTour->secondary_label)
+                      <a href="{{ $virtualTour->secondary_url ?? '#' }}" class="btn-outline">{{ $virtualTour->secondary_label }}</a>
+                    @endif
                   </div>
-                  <div class="tour-feature">
-                    <i class="bi bi-map"></i>
-                    <div>
-                      <strong>Interactive Map</strong>
-                      <p>Navigate with ease</p>
-                    </div>
-                  </div>
-                  <div class="tour-feature">
-                    <i class="bi bi-info-circle"></i>
-                    <div>
-                      <strong>Detailed Info</strong>
-                      <p>Learn about each facility</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="tour-actions">
-                  <a href="#" class="btn-primary">Start Virtual Tour</a>
-                  <a href="#" class="btn-outline">Schedule Visit</a>
                 </div>
               </div>
-            </div>
-            <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
-              <div class="tour-visual">
-                <div class="video-container">
-                  <video autoplay="" muted="" loop="">
-                    <source src="/College/assets/img/education/video-5.mp4" type="video/mp4">
-                  </video>
-                  <div class="play-overlay">
-                    <button class="play-btn">
-                      <i class="bi bi-play-fill"></i>
-                    </button>
+              <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
+                <div class="tour-visual">
+                  <div class="video-container">
+                    <video autoplay="" muted="" loop="">
+                      <source src="{{ $virtualTour->video_url ? asset(ltrim($virtualTour->video_url, '/')) : '' }}" type="video/mp4">
+                    </video>
+                    <div class="play-overlay">
+                      <button class="play-btn">
+                        <i class="bi bi-play-fill"></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        @endif
 
         <!-- Campus Highlights Carousel -->
-        <div class="highlights-carousel" data-aos="fade-up" data-aos-delay="200">
-          <div class="section-header">
-            <h2>Campus Highlights</h2>
-            <p>Donec rutrum congue leo eget malesuada. Pellentesque habitant morbi tristique senectus et netus et malesuada fames.</p>
-          </div>
+        @if($highlights->isNotEmpty())
+          <div class="highlights-carousel" data-aos="fade-up" data-aos-delay="200">
+            <div class="section-header">
+              <h2>Campus Highlights</h2>
+              <p>Discover the spaces and services that make our campus special.</p>
+            </div>
 
-          <div class="campus-slider swiper init-swiper">
-            <script type="application/json" class="swiper-config">
-              {
-                "loop": true,
-                "speed": 800,
-                "autoplay": {
-                  "delay": 4000
-                },
-                "slidesPerView": 1,
-                "spaceBetween": 30,
-                "navigation": {
-                  "nextEl": ".swiper-button-next",
-                  "prevEl": ".swiper-button-prev"
-                },
-                "breakpoints": {
-                  "768": {
-                    "slidesPerView": 2
+            <div class="campus-slider swiper init-swiper">
+              <script type="application/json" class="swiper-config">
+                {
+                  "loop": true,
+                  "speed": 800,
+                  "autoplay": {
+                    "delay": 4000
                   },
-                  "1024": {
-                    "slidesPerView": 3
+                  "slidesPerView": 1,
+                  "spaceBetween": 30,
+                  "navigation": {
+                    "nextEl": ".swiper-button-next",
+                    "prevEl": ".swiper-button-prev"
+                  },
+                  "breakpoints": {
+                    "768": {
+                      "slidesPerView": 2
+                    },
+                    "1024": {
+                      "slidesPerView": 3
+                    }
                   }
                 }
-              }
-            </script>
-            <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                <div class="highlight-card">
-                  <div class="card-image">
-                    <img src="/College/assets/img/education/campus-10.webp" alt="Central Library" class="img-fluid" loading="lazy">
-                    <div class="image-overlay">
-                      <span class="category-tag">Academic</span>
+              </script>
+              <div class="swiper-wrapper">
+                @foreach($highlights as $highlight)
+                  <div class="swiper-slide">
+                    <div class="highlight-card">
+                      <div class="card-image">
+                        @if($highlight->image)
+                          <img src="{{ asset(ltrim($highlight->image, '/')) }}" alt="{{ $highlight->title }}" class="img-fluid" loading="lazy">
+                        @endif
+                        @if($highlight->category_label)
+                          <div class="image-overlay">
+                            <span class="category-tag">{{ $highlight->category_label }}</span>
+                          </div>
+                        @endif
+                      </div>
+                      <div class="card-body">
+                        <h4>{{ $highlight->title }}</h4>
+                        <p>{{ $highlight->description }}</p>
+                        <div class="card-stats">
+                          @if($highlight->stat_one_label)
+                            <div class="stat">
+                              <i class="{{ $highlight->stat_one_icon ?? 'bi bi-star' }}"></i>
+                              <span>{{ $highlight->stat_one_label }}</span>
+                            </div>
+                          @endif
+                          @if($highlight->stat_two_label)
+                            <div class="stat">
+                              <i class="{{ $highlight->stat_two_icon ?? 'bi bi-star' }}"></i>
+                              <span>{{ $highlight->stat_two_label }}</span>
+                            </div>
+                          @endif
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div class="card-body">
-                    <h4>Central Library</h4>
-                    <p>Sed porttitor lectus nibh. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus.</p>
-                    <div class="card-stats">
-                      <div class="stat">
-                        <i class="bi bi-book"></i>
-                        <span>500K+ Books</span>
-                      </div>
-                      <div class="stat">
-                        <i class="bi bi-wifi"></i>
-                        <span>High-Speed WiFi</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                @endforeach
               </div>
-
-              <div class="swiper-slide">
-                <div class="highlight-card">
-                  <div class="card-image">
-                    <img src="/College/assets/img/education/campus-11.webp" alt="Innovation Hub" class="img-fluid" loading="lazy">
-                    <div class="image-overlay">
-                      <span class="category-tag">Research</span>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <h4>Innovation Hub</h4>
-                    <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-                    <div class="card-stats">
-                      <div class="stat">
-                        <i class="bi bi-cpu"></i>
-                        <span>AI Labs</span>
-                      </div>
-                      <div class="stat">
-                        <i class="bi bi-gear"></i>
-                        <span>Maker Space</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="swiper-slide">
-                <div class="highlight-card">
-                  <div class="card-image">
-                    <img src="/College/assets/img/education/campus-1.webp" alt="Student Center" class="img-fluid" loading="lazy">
-                    <div class="image-overlay">
-                      <span class="category-tag">Community</span>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <h4>Student Center</h4>
-                    <p>Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vivamus magna justo lacinia eget.</p>
-                    <div class="card-stats">
-                      <div class="stat">
-                        <i class="bi bi-cup-hot"></i>
-                        <span>Food Court</span>
-                      </div>
-                      <div class="stat">
-                        <i class="bi bi-controller"></i>
-                        <span>Game Lounge</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="swiper-slide">
-                <div class="highlight-card">
-                  <div class="card-image">
-                    <img src="/College/assets/img/education/campus-2.webp" alt="Wellness Center" class="img-fluid" loading="lazy">
-                    <div class="image-overlay">
-                      <span class="category-tag">Wellness</span>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <h4>Wellness Center</h4>
-                    <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Proin eget tortor risus.</p>
-                    <div class="card-stats">
-                      <div class="stat">
-                        <i class="bi bi-heart-pulse"></i>
-                        <span>Health Services</span>
-                      </div>
-                      <div class="stat">
-                        <i class="bi bi-activity"></i>
-                        <span>Fitness Classes</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <div class="swiper-pagination"></div>
+              <div class="swiper-button-prev"></div>
+              <div class="swiper-button-next"></div>
             </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
           </div>
-        </div>
+        @endif
 
         <!-- Campus Map Integration -->
-        <div class="map-integration" data-aos="fade-up" data-aos-delay="100">
-          <div class="row">
-            <div class="col-lg-4" data-aos="fade-right" data-aos-delay="200">
-              <div class="map-sidebar">
-                <h3>Navigate Our Campus</h3>
-                <p>Explore our comprehensive campus map to find buildings, parking areas, and important facilities.</p>
+        @if($mapSetting)
+          <div class="map-integration" data-aos="fade-up" data-aos-delay="100">
+            <div class="row">
+              <div class="col-lg-4" data-aos="fade-right" data-aos-delay="200">
+                <div class="map-sidebar">
+                  <h3>{{ $mapSetting->title ?? 'Navigate Our Campus' }}</h3>
+                  <p>{{ $mapSetting->description }}</p>
 
-                <div class="location-categories">
-                  <div class="category-filter active" data-category="all">
-                    <i class="bi bi-grid"></i>
-                    <span>All Locations</span>
-                  </div>
-                  <div class="category-filter" data-category="academic">
-                    <i class="bi bi-book"></i>
-                    <span>Academic</span>
-                  </div>
-                  <div class="category-filter" data-category="dining">
-                    <i class="bi bi-cup-hot"></i>
-                    <span>Dining</span>
-                  </div>
-                  <div class="category-filter" data-category="parking">
-                    <i class="bi bi-car-front"></i>
-                    <span>Parking</span>
-                  </div>
-                  <div class="category-filter" data-category="recreation">
-                    <i class="bi bi-activity"></i>
-                    <span>Recreation</span>
-                  </div>
-                </div>
+                  @if($mapCategories->isNotEmpty())
+                    <div class="location-categories">
+                      @foreach($mapCategories as $index => $category)
+                        <div class="category-filter {{ $index === 0 ? 'active' : '' }}" data-category="{{ $category->key ?? 'all' }}">
+                          <i class="{{ $category->icon_class ?? 'bi bi-grid' }}"></i>
+                          <span>{{ $category->name }}</span>
+                        </div>
+                      @endforeach
+                    </div>
+                  @endif
 
-                <div class="map-actions">
-                  <a href="#" class="action-link">
-                    <i class="bi bi-download"></i>
-                    Download Campus Map
-                  </a>
-                  <a href="#" class="action-link">
-                    <i class="bi bi-phone"></i>
-                    Campus Shuttle Info
-                  </a>
-                  <a href="#" class="action-link">
-                    <i class="bi bi-car-front"></i>
-                    Parking Information
-                  </a>
+                  @if($mapActions->isNotEmpty())
+                    <div class="map-actions">
+                      @foreach($mapActions as $action)
+                        <a href="{{ $action->url ?? '#' }}" class="action-link">
+                          <i class="{{ $action->icon_class ?? 'bi bi-link-45deg' }}"></i>
+                          {{ $action->label }}
+                        </a>
+                      @endforeach
+                    </div>
+                  @endif
                 </div>
               </div>
-            </div>
-            <div class="col-lg-8" data-aos="fade-left" data-aos-delay="300">
-              <div class="map-embed">
-                <div class="ratio ratio-4x3">
-                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215482929933!2d-73.95999542349116!3d40.80709487138641!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2f7a01fb08965%3A0x1234567890abcdef!2sColumbia%20University!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
-                </div>
-                <div class="map-overlay-info">
-                  <div class="info-card">
-                    <h5>Main Campus</h5>
-                    <p>116th St &amp; Broadway, New York</p>
-                    <div class="quick-stats">
-                      <span><i class="bi bi-geo-alt"></i> 32 Acres</span>
-                      <span><i class="bi bi-building"></i> 17 Buildings</span>
+              <div class="col-lg-8" data-aos="fade-left" data-aos-delay="300">
+                <div class="map-embed">
+                  <div class="ratio ratio-4x3">
+                    <iframe src="{{ $mapSetting->embed_url ?? '' }}" allowfullscreen="" loading="lazy"></iframe>
+                  </div>
+                  <div class="map-overlay-info">
+                    <div class="info-card">
+                      <h5>{{ $mapSetting->location_title ?? 'Main Campus' }}</h5>
+                      <p>{{ $mapSetting->location_address }}</p>
+                      <div class="quick-stats">
+                        @if($mapSetting->stat_one_label)
+                          <span><i class="{{ $mapSetting->stat_one_icon ?? 'bi bi-geo-alt' }}"></i> {{ $mapSetting->stat_one_label }}</span>
+                        @endif
+                        @if($mapSetting->stat_two_label)
+                          <span><i class="{{ $mapSetting->stat_two_icon ?? 'bi bi-building' }}"></i> {{ $mapSetting->stat_two_label }}</span>
+                        @endif
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        @endif
 
       </div>
 

@@ -21,6 +21,17 @@
         <input name="degree_text" class="mt-1 w-full rounded border-gray-300" value="{{ old('degree_text', $program->degree_text ?? '') }}">
     </div>
     <div>
+        <label class="block text-sm font-medium">Program Level</label>
+        <select name="program_level" class="mt-1 w-full rounded border-gray-300">
+            @php
+                $currentLevel = old('program_level', $program->program_level ?? 'undergraduate');
+            @endphp
+            <option value="undergraduate" {{ $currentLevel === 'undergraduate' ? 'selected' : '' }}>Undergraduate</option>
+            <option value="graduate" {{ $currentLevel === 'graduate' ? 'selected' : '' }}>Graduate</option>
+            <option value="certificate" {{ $currentLevel === 'certificate' ? 'selected' : '' }}>Certificate</option>
+        </select>
+    </div>
+    <div>
         <label class="block text-sm font-medium">Image</label>
         <input name="image" type="file" accept="image/*" class="mt-1 w-full rounded border-gray-300">
         @if(!empty($program?->image))

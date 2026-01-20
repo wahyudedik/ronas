@@ -12,7 +12,8 @@
                 <a class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow" href="{{ route('admin.landing.hero') }}">Hero</a>
                 <a class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow" href="{{ route('admin.landing.stats.index') }}">Statistics</a>
                 <a class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow" href="{{ route('admin.landing.programs.index') }}">Featured Programs</a>
-                <a class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow" href="{{ route('admin.landing.student-life.index') }}">Student Life</a>
+                <a class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow" href="{{ route('admin.landing.student-life.index') }}">Student Life Items</a>
+                <a class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow" href="{{ route('admin.landing.student-life-sections.index') }}">Student Life Sections</a>
                 <a class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow" href="{{ route('admin.landing.testimonials.index') }}">Testimonials</a>
                 <a class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow" href="{{ route('admin.landing.news.index') }}">News</a>
                 <a class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow" href="{{ route('admin.landing.events.index') }}">Events</a>

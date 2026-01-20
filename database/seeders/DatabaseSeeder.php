@@ -19,5 +19,10 @@ class DatabaseSeeder extends Seeder
         $this->call(LandingPageSeeder::class);
         $this->call(AboutPageSeeder::class);
         $this->call(AdmissionsPageSeeder::class);
+        $this->call(AcademicsPageSeeder::class);
+        $this->call(StudentLifePageSeeder::class);
+        $this->call(CampusFacilitiesSeeder::class);
+        $this->call(NewsSeeder::class);
+        $this->call(EventSeeder::class);
     }
 }

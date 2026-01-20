@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LandingEventItem;
+use App\Models\Event;
 use App\Models\LandingHero;
-use App\Models\LandingNewsItem;
+use App\Models\News;
 use App\Models\LandingProgram;
 use App\Models\LandingSection;
 use App\Models\LandingStat;
@@ -14,6 +14,10 @@ use App\Models\AboutCoreValue;
 use App\Models\AboutHistory;
 use App\Models\AboutLeadershipSection;
 use App\Models\AboutMissionVision;
+use App\Models\AcademicsFacultyHighlight;
+use App\Models\CampusFacilityCategory;
+use App\Models\CampusHighlight;
+use App\Models\StudentLifeSectionSetting;
 use App\Models\AdmissionsApplicationStep;
 use App\Models\AdmissionsDeadline;
 use App\Models\AdmissionsDeadlineSetting;
@@ -53,23 +57,53 @@ class LandingPageController extends Controller
 
         $studentLifeItems = LandingStudentLifeItem::query()
             ->where('is_active', true)
+            ->where('category', '!=', 'gallery')
             ->orderBy('sort_order')
+            ->take(6)
             ->get();
+
+        $studentLifeLandingSetting = StudentLifeSectionSetting::query()
+            ->where('key', 'landing')
+            ->first();
 
         $testimonials = LandingTestimonial::query()
             ->where('is_active', true)
             ->orderBy('sort_order')
             ->get();
 
-        $newsItems = LandingNewsItem::query()
+        $newsItems = News::query()
             ->where('is_active', true)
-            ->orderBy('sort_order')
             ->orderByDesc('published_at')
+            ->orderBy('sort_order')
+            ->take(6)
             ->get();
 
-        $eventItems = LandingEventItem::query()
+        $eventItems = Event::query()
+            ->where('is_active', true)
+            ->where('event_date', '>=', now())
+            ->orderBy('event_date')
+            ->orderBy('sort_order')
+            ->take(6)
+            ->get();
+
+        $facultyHighlights = AcademicsFacultyHighlight::query()
             ->where('is_active', true)
             ->orderBy('sort_order')
+            ->take(4)
+            ->get();
+
+        $campusHighlights = CampusHighlight::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->take(6)
+            ->get();
+
+        $campusCategories = CampusFacilityCategory::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->take(3)
             ->get();
 
         $aboutHistory = AboutHistory::query()
@@ -157,6 +191,7 @@ class LandingPageController extends Controller
             'featuredProgram',
             'otherPrograms',
             'studentLifeItems',
+            'studentLifeLandingSetting',
             'testimonials',
             'newsItems',
             'eventItems',
@@ -172,7 +207,10 @@ class LandingPageController extends Controller
             'admissionsRequirementSetting',
             'admissionsDeadlines',
             'admissionsDeadlineSetting',
-            'admissionsRequestInfo'
+            'admissionsRequestInfo',
+            'facultyHighlights',
+            'campusHighlights',
+            'campusCategories'
         ));
     }
 }

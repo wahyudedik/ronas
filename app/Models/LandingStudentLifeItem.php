@@ -11,8 +11,11 @@ class LandingStudentLifeItem extends Model
 
     protected $fillable = [
         'title',
+        'category',
         'description',
         'image',
+        'icon_class',
+        'badge_text',
         'link_label',
         'link_url',
         'sort_order',

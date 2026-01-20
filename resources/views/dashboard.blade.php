@@ -31,6 +31,24 @@
                 </div>
             @endcan
 
+            @can('manage facilities')
+                <div class="mt-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                        <h3 class="text-lg font-semibold mb-4">Campus Facilities Setup</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            <a class="text-blue-600 hover:underline dark:text-blue-400" href="{{ route('admin.facilities.categories.index') }}">Facility Categories</a>
+                            <a class="text-blue-600 hover:underline dark:text-blue-400" href="{{ route('admin.facilities.items.index') }}">Facility Items</a>
+                            <a class="text-blue-600 hover:underline dark:text-blue-400" href="{{ route('admin.facilities.virtual-tours.index') }}">Virtual Tour</a>
+                            <a class="text-blue-600 hover:underline dark:text-blue-400" href="{{ route('admin.facilities.virtual-tour-features.index') }}">Virtual Tour Features</a>
+                            <a class="text-blue-600 hover:underline dark:text-blue-400" href="{{ route('admin.facilities.highlights.index') }}">Highlights Carousel</a>
+                            <a class="text-blue-600 hover:underline dark:text-blue-400" href="{{ route('admin.facilities.map-settings.index') }}">Map Settings</a>
+                            <a class="text-blue-600 hover:underline dark:text-blue-400" href="{{ route('admin.facilities.map-categories.index') }}">Map Categories</a>
+                            <a class="text-blue-600 hover:underline dark:text-blue-400" href="{{ route('admin.facilities.map-actions.index') }}">Map Actions</a>
+                        </div>
+                    </div>
+                </div>
+            @endcan
+
             <div class="mt-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h3 class="text-lg font-semibold mb-4">College Site</h3>

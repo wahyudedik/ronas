@@ -35,6 +35,26 @@
                             {{ __('Admissions Setup') }}
                         </x-nav-link>
                     @endcan
+                    @can('manage academics')
+                        <x-nav-link :href="route('admin.academics.index')" :active="request()->routeIs('admin.academics.*')">
+                            {{ __('Academics Setup') }}
+                        </x-nav-link>
+                    @endcan
+                    @can('manage facilities')
+                        <x-nav-link :href="route('admin.facilities.index')" :active="request()->routeIs('admin.facilities.*')">
+                            {{ __('Facilities Setup') }}
+                        </x-nav-link>
+                    @endcan
+                    @can('manage news')
+                        <x-nav-link :href="route('admin.news.index')" :active="request()->routeIs('admin.news.*')">
+                            {{ __('News') }}
+                        </x-nav-link>
+                    @endcan
+                    @can('manage events')
+                        <x-nav-link :href="route('admin.events.index')" :active="request()->routeIs('admin.events.*')">
+                            {{ __('Events') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -108,6 +128,26 @@
             @can('manage admissions')
                 <x-responsive-nav-link :href="route('admin.admissions.index')" :active="request()->routeIs('admin.admissions.*')">
                     {{ __('Admissions Setup') }}
+                </x-responsive-nav-link>
+            @endcan
+            @can('manage academics')
+                <x-responsive-nav-link :href="route('admin.academics.index')" :active="request()->routeIs('admin.academics.*')">
+                    {{ __('Academics Setup') }}
+                </x-responsive-nav-link>
+            @endcan
+            @can('manage facilities')
+                <x-responsive-nav-link :href="route('admin.facilities.index')" :active="request()->routeIs('admin.facilities.*')">
+                    {{ __('Facilities Setup') }}
+                </x-responsive-nav-link>
+            @endcan
+            @can('manage news')
+                <x-responsive-nav-link :href="route('admin.news.index')" :active="request()->routeIs('admin.news.*')">
+                    {{ __('News') }}
+                </x-responsive-nav-link>
+            @endcan
+            @can('manage events')
+                <x-responsive-nav-link :href="route('admin.events.index')" :active="request()->routeIs('admin.events.*')">
+                    {{ __('Events') }}
                 </x-responsive-nav-link>
             @endcan
         </div>

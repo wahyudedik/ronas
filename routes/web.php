@@ -3,6 +3,11 @@
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\CollegeAboutController;
 use App\Http\Controllers\CollegeAdmissionsController;
+use App\Http\Controllers\CollegeAcademicsController;
+use App\Http\Controllers\CollegeCampusFacilitiesController;
+use App\Http\Controllers\CollegeStudentsLifeController;
+use App\Http\Controllers\CollegeNewsController;
+use App\Http\Controllers\CollegeEventsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Admin\LandingSectionController;
@@ -32,19 +37,31 @@ use App\Http\Controllers\Admin\AdmissionsDeadlineSettingController;
 use App\Http\Controllers\Admin\AdmissionsDeadlineController;
 use App\Http\Controllers\Admin\AdmissionsCampusVisitSettingController;
 use App\Http\Controllers\Admin\AdmissionsCampusVisitOptionController;
+use App\Http\Controllers\Admin\AcademicsFacultyHighlightController;
+use App\Http\Controllers\Admin\StudentLifeSectionSettingController;
+use App\Http\Controllers\Admin\CampusFacilityCategoryController;
+use App\Http\Controllers\Admin\CampusFacilityItemController;
+use App\Http\Controllers\Admin\CampusVirtualTourController;
+use App\Http\Controllers\Admin\CampusVirtualTourFeatureController;
+use App\Http\Controllers\Admin\CampusHighlightController;
+use App\Http\Controllers\Admin\CampusMapSettingController;
+use App\Http\Controllers\Admin\CampusMapCategoryController;
+use App\Http\Controllers\Admin\CampusMapActionController;
+use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\EventController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('college.index');
 Route::get('/about', [CollegeAboutController::class, 'index'])->name('college.about');
 Route::get('/admissions', [CollegeAdmissionsController::class, 'index'])->name('college.admissions');
-Route::view('/academics', 'college.academics')->name('college.academics');
+Route::get('/academics', [CollegeAcademicsController::class, 'index'])->name('college.academics');
 Route::view('/faculty-staff', 'college.faculty-staff')->name('college.faculty-staff');
-Route::view('/campus-facilities', 'college.campus-facilities')->name('college.campus-facilities');
-Route::view('/students-life', 'college.students-life')->name('college.students-life');
-Route::view('/news', 'college.news')->name('college.news');
-Route::view('/news-details', 'college.news-details')->name('college.news-details');
-Route::view('/events', 'college.events')->name('college.events');
-Route::view('/event-details', 'college.event-details')->name('college.event-details');
+Route::get('/campus-facilities', [CollegeCampusFacilitiesController::class, 'index'])->name('college.campus-facilities');
+Route::get('/students-life', [CollegeStudentsLifeController::class, 'index'])->name('college.students-life');
+Route::get('/news', [CollegeNewsController::class, 'index'])->name('college.news');
+Route::get('/news/{news}', [CollegeNewsController::class, 'show'])->name('college.news.show');
+Route::get('/events', [CollegeEventsController::class, 'index'])->name('college.events');
+Route::get('/events/{event}', [CollegeEventsController::class, 'show'])->name('college.events.show');
 Route::view('/alumni', 'college.alumni')->name('college.alumni');
 Route::view('/contact', 'college.contact')->name('college.contact');
 Route::view('/privacy', 'college.privacy')->name('college.privacy');
@@ -68,6 +85,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/', function () {
             return redirect()->route('admin.landing.sections.index');
         })->name('index');
+        Route::get('student-life-sections', [StudentLifeSectionSettingController::class, 'index'])->name('student-life-sections.index');
+        Route::put('student-life-sections/{key}', [StudentLifeSectionSettingController::class, 'update'])->name('student-life-sections.update');
         Route::post('sections/reorder', [LandingSectionController::class, 'reorder'])->name('sections.reorder');
         Route::patch('sections/{section}/toggle', [LandingSectionController::class, 'toggle'])->name('sections.toggle');
         Route::resource('sections', LandingSectionController::class);
@@ -149,6 +168,52 @@ Route::middleware('auth')->group(function () {
         Route::post('campus-visit-options/reorder', [AdmissionsCampusVisitOptionController::class, 'reorder'])->name('campus-visit-options.reorder');
         Route::patch('campus-visit-options/{campus_visit_option}/toggle', [AdmissionsCampusVisitOptionController::class, 'toggle'])->name('campus-visit-options.toggle');
         Route::resource('campus-visit-options', AdmissionsCampusVisitOptionController::class);
+    });
+
+    Route::middleware('permission:manage academics')->prefix('dashboard/academics')->name('admin.academics.')->group(function () {
+        Route::get('/', function () {
+            return view('admin.academics.index');
+        })->name('index');
+        Route::post('faculty-highlights/reorder', [AcademicsFacultyHighlightController::class, 'reorder'])->name('faculty-highlights.reorder');
+        Route::patch('faculty-highlights/{faculty_highlight}/toggle', [AcademicsFacultyHighlightController::class, 'toggle'])->name('faculty-highlights.toggle');
+        Route::resource('faculty-highlights', AcademicsFacultyHighlightController::class);
+    });
+
+    Route::middleware('permission:manage facilities')->prefix('dashboard/facilities')->name('admin.facilities.')->group(function () {
+        Route::get('/', function () {
+            return view('admin.facilities.index');
+        })->name('index');
+        Route::post('categories/reorder', [CampusFacilityCategoryController::class, 'reorder'])->name('categories.reorder');
+        Route::patch('categories/{category}/toggle', [CampusFacilityCategoryController::class, 'toggle'])->name('categories.toggle');
+        Route::resource('categories', CampusFacilityCategoryController::class);
+        Route::post('items/reorder', [CampusFacilityItemController::class, 'reorder'])->name('items.reorder');
+        Route::patch('items/{item}/toggle', [CampusFacilityItemController::class, 'toggle'])->name('items.toggle');
+        Route::resource('items', CampusFacilityItemController::class);
+        Route::patch('virtual-tours/{virtual_tour}/toggle', [CampusVirtualTourController::class, 'toggle'])->name('virtual-tours.toggle');
+        Route::resource('virtual-tours', CampusVirtualTourController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+        Route::post('virtual-tour-features/reorder', [CampusVirtualTourFeatureController::class, 'reorder'])->name('virtual-tour-features.reorder');
+        Route::patch('virtual-tour-features/{feature}/toggle', [CampusVirtualTourFeatureController::class, 'toggle'])->name('virtual-tour-features.toggle');
+        Route::resource('virtual-tour-features', CampusVirtualTourFeatureController::class)
+            ->parameters(['virtual-tour-features' => 'feature']);
+        Route::post('highlights/reorder', [CampusHighlightController::class, 'reorder'])->name('highlights.reorder');
+        Route::patch('highlights/{highlight}/toggle', [CampusHighlightController::class, 'toggle'])->name('highlights.toggle');
+        Route::resource('highlights', CampusHighlightController::class);
+        Route::patch('map-settings/{map_setting}/toggle', [CampusMapSettingController::class, 'toggle'])->name('map-settings.toggle');
+        Route::resource('map-settings', CampusMapSettingController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+        Route::post('map-categories/reorder', [CampusMapCategoryController::class, 'reorder'])->name('map-categories.reorder');
+        Route::patch('map-categories/{map_category}/toggle', [CampusMapCategoryController::class, 'toggle'])->name('map-categories.toggle');
+        Route::resource('map-categories', CampusMapCategoryController::class);
+        Route::post('map-actions/reorder', [CampusMapActionController::class, 'reorder'])->name('map-actions.reorder');
+        Route::patch('map-actions/{map_action}/toggle', [CampusMapActionController::class, 'toggle'])->name('map-actions.toggle');
+        Route::resource('map-actions', CampusMapActionController::class);
+    });
+
+    Route::middleware('permission:manage news')->prefix('dashboard')->name('admin.')->group(function () {
+        Route::resource('news', NewsController::class);
+    });
+
+    Route::middleware('permission:manage events')->prefix('dashboard')->name('admin.')->group(function () {
+        Route::resource('events', EventController::class);
     });
 });
 

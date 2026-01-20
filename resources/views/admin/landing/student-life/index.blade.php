@@ -23,6 +23,7 @@
                             <tr class="text-left">
                                 <th class="py-2 w-8"></th>
                                 <th class="py-2">Title</th>
+                                <th class="py-2">Category</th>
                                 <th class="py-2">Order</th>
                                 <th class="py-2">Active</th>
                                 <th class="py-2 text-right">Actions</th>
@@ -35,6 +36,7 @@
                                         @include('admin.landing.partials.drag-handle')
                                     </td>
                                     <td class="py-2">{{ $item->title }}</td>
+                                    <td class="py-2">{{ $item->category }}</td>
                                     <td class="py-2">{{ $item->sort_order }}</td>
                                     <td class="py-2">
                                         <form action="{{ route('admin.landing.student-life.toggle', $item) }}" method="POST">
@@ -185,96 +187,4 @@
             });
         })();
     </script>
-</x-app-layout>
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Student Life') }}
-            </h2>
-            <div class="flex items-center gap-3">
-                <a href="{{ route('admin.landing.index') }}" class="text-sm text-indigo-600 hover:underline dark:text-indigo-400">Back</a>
-                <a href="{{ route('admin.landing.student-life.create') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md text-sm">Add Item</a>
-            </div>
-        </div>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            @if (session('status'))
-                <div class="rounded-md bg-green-50 p-4 text-sm text-green-700">
-                    {{ session('status') }}
-                </div>
-            @endif
-
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-sm font-semibold mb-4">Section Settings</h3>
-                    <form method="POST" action="{{ route('admin.landing.section.update', 'student_life') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        @csrf
-                        @method('PUT')
-                        <div>
-                            <x-input-label for="title" value="Title" />
-                            <x-text-input id="title" name="title" class="mt-1 block w-full" :value="old('title', $setting->title)" />
-                        </div>
-                        <div>
-                            <x-input-label for="subtitle" value="Subtitle" />
-                            <x-text-input id="subtitle" name="subtitle" class="mt-1 block w-full" :value="old('subtitle', $setting->subtitle)" />
-                        </div>
-                        <div>
-                            <x-input-label for="description" value="Description" />
-                            <x-text-input id="description" name="description" class="mt-1 block w-full" :value="old('description', $setting->description)" />
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <input type="checkbox" id="is_active" name="is_active" value="1" class="rounded border-gray-300" {{ old('is_active', $setting->is_active) ? 'checked' : '' }}>
-                            <label for="is_active">Active</label>
-                        </div>
-                        <div class="md:col-span-3 flex justify-end">
-                            <x-primary-button>Save Section</x-primary-button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
-                            <thead>
-                                <tr class="text-left text-gray-600 dark:text-gray-300">
-                                    <th class="py-2">Title</th>
-                                    <th class="py-2">Link Label</th>
-                                    <th class="py-2">Order</th>
-                                    <th class="py-2">Active</th>
-                                    <th class="py-2 text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
-                                @forelse ($items as $item)
-                                    <tr>
-                                        <td class="py-2">{{ $item->title }}</td>
-                                        <td class="py-2">{{ $item->link_label }}</td>
-                                        <td class="py-2">{{ $item->sort_order }}</td>
-                                        <td class="py-2">{{ $item->is_active ? 'Yes' : 'No' }}</td>
-                                        <td class="py-2 text-right">
-                                            <a href="{{ route('admin.landing.student-life.edit', $item) }}" class="text-indigo-600 hover:underline dark:text-indigo-400">Edit</a>
-                                            <form method="POST" action="{{ route('admin.landing.student-life.destroy', $item) }}" class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="ml-3 text-red-600 hover:underline dark:text-red-400" onclick="return confirm('Delete this item?')">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="py-4 text-center text-gray-500">No items yet.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </x-app-layout>

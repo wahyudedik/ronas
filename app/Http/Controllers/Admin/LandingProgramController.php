@@ -105,6 +105,7 @@ class LandingProgramController extends Controller
             'description' => ['nullable', 'string'],
             'duration_text' => ['nullable', 'string', 'max:100'],
             'degree_text' => ['nullable', 'string', 'max:100'],
+            'program_level' => ['required', 'in:undergraduate,graduate,certificate'],
             'image' => ['nullable', 'image', 'max:2048'],
             'badge_text' => ['nullable', 'string', 'max:50'],
             'meta_one' => ['nullable', 'string', 'max:100'],
@@ -116,6 +117,7 @@ class LandingProgramController extends Controller
 
         $validated['is_featured'] = (bool) ($validated['is_featured'] ?? false);
         $validated['is_active'] = (bool) ($validated['is_active'] ?? false);
+        $validated['program_level'] = $validated['program_level'] ?? 'undergraduate';
 
         return $validated;
     }

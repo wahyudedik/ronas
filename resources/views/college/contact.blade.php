@@ -116,7 +116,7 @@
 
                 <div class="form-submit">
                   <button type="submit">Send Message</button>
-                  @if($contact->social_media_links)
+                  @if($contact?->social_media_links)
                   <div class="social-links">
                     @if(isset($contact->social_media_links['twitter']))
                         <a href="{{ $contact->social_media_links['twitter'] }}" target="_blank"><i class="bi bi-twitter"></i></a>

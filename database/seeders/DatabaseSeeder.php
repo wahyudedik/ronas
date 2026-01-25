@@ -29,5 +29,20 @@ class DatabaseSeeder extends Seeder
 
         $this->call(EventCategorySeeder::class);
         $this->call(EventSeeder::class);
+
+        // Alumni
+        $this->call(AlumniSeeder::class);
+        $this->call(AlumniStorySeeder::class);
+        $this->call(AlumniEventSeeder::class);
+        $this->call(GetInvolvedOptionSeeder::class);
+        $this->call(DonationCampaignSeeder::class);
+
+        // Contact
+        $this->call(ContactSeeder::class);
+        $this->call(ContactSettingSeeder::class);
+        // $this->call(ContactMessageSeeder::class); // Optional: if you want dummy messages
+
+        // Legal
+        $this->call(LegalPageSeeder::class);
     }
 }

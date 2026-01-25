@@ -8,20 +8,22 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class LegalPageSeeder extends Seeder
 {
     public function run(): void
     {
+        // Reset cached roles and permissions
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
+
         // Ensure 'manage legal pages' permission exists
-        if (!Permission::where('name', 'manage legal pages')->exists()) {
-            Permission::create(['name' => 'manage legal pages']);
-        }
+        $permission = Permission::findOrCreate('manage legal pages', 'web');
         
         // Give permission to admin role if it exists
-        $adminRole = Role::where('name', 'admin')->first();
+        $adminRole = Role::where('name', 'admin')->where('guard_name', 'web')->first();
         if ($adminRole) {
-            $adminRole->givePermissionTo('manage legal pages');
+            $adminRole->givePermissionTo($permission);
         }
 
         // Get the first user (usually admin) to associate as creator

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\News;
+use App\Models\NewsCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -14,7 +16,7 @@ class NewsController extends Controller
 {
     public function index(): View
     {
-        $news = News::query()
+        $news = News::with(['category', 'author'])
             ->orderByDesc('published_at')
             ->orderBy('sort_order')
             ->paginate(15);
@@ -24,19 +26,22 @@ class NewsController extends Controller
 
     public function create(): View
     {
-        return view('admin.news.create');
+        $categories = NewsCategory::all();
+        return view('admin.news.create', compact('categories'));
     }
 
     public function store(Request $request): RedirectResponse
     {
         $validated = $this->validateNews($request);
         $this->handleImageUpload($request, $validated);
-        
+
         // Generate slug if not provided
         if (empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['title']);
         }
-        
+
+        $validated['author_id'] = Auth::id();
+
         News::create($validated);
 
         return redirect()
@@ -46,19 +51,20 @@ class NewsController extends Controller
 
     public function edit(News $news): View
     {
-        return view('admin.news.edit', compact('news'));
+        $categories = NewsCategory::all();
+        return view('admin.news.edit', compact('news', 'categories'));
     }
 
     public function update(Request $request, News $news): RedirectResponse
     {
         $validated = $this->validateNews($request);
         $this->handleImageUpload($request, $validated, $news->image, $news->author_image);
-        
+
         // Generate slug if title changed and slug not provided
         if ($news->title !== $validated['title'] && empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['title']);
         }
-        
+
         $news->update($validated);
 
         return redirect()
@@ -83,15 +89,17 @@ class NewsController extends Controller
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', 'unique:news,slug,' . $newsId],
-            'category' => ['nullable', 'string', 'max:100'],
+            'category_id' => ['nullable', 'exists:news_categories,id'],
             'excerpt' => ['nullable', 'string'],
             'content' => ['nullable', 'string'],
-            'author_name' => ['nullable', 'string', 'max:255'],
             'author_image' => ['nullable', 'image', 'max:2048'],
             'published_at' => ['nullable', 'date'],
             'image' => ['nullable', 'image', 'max:2048'],
             'sort_order' => ['nullable', 'integer'],
             'is_active' => ['nullable', 'boolean'],
+            'status' => ['required', 'in:draft,published,archived'],
+            'meta_keywords' => ['nullable', 'string'],
+            'meta_description' => ['nullable', 'string'],
         ]);
 
         $validated['is_active'] = (bool) ($validated['is_active'] ?? false);
@@ -105,8 +113,7 @@ class NewsController extends Controller
         array &$validated,
         ?string $existingImage = null,
         ?string $existingAuthorImage = null
-    ): void
-    {
+    ): void {
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('news', 'public');
             $validated['image'] = 'storage/' . $path;

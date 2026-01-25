@@ -2,53 +2,65 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
 
 class Event extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'title',
         'slug',
-        'category',
+        'category_id',
         'description',
-        'event_date',
-        'event_time',
-        'location',
-        'participants',
+        'start_date',
+        'end_date',
+        'start_time',
+        'end_time',
+        'venue',
+        'address',
+        'capacity',
+        'registration_deadline',
+        'status',
         'image',
         'registration_url',
         'is_active',
-        'sort_order',
+        'sort_order'
     ];
 
     protected $casts = [
-        'event_date' => 'date',
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'registration_deadline' => 'datetime',
         'is_active' => 'boolean',
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($event) {
-            if (empty($event->slug)) {
-                $event->slug = Str::slug($event->title);
-            }
-        });
-
-        static::updating(function ($event) {
-            if ($event->isDirty('title') && empty($event->slug)) {
-                $event->slug = Str::slug($event->title);
-            }
-        });
-    }
 
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(EventCategory::class, 'category_id');
+    }
+
+    public function registrations(): HasMany
+    {
+        return $this->hasMany(EventRegistration::class);
+    }
+
+    public function scopeUpcoming(Builder $query)
+    {
+        return $query->where('status', 'upcoming')
+            ->where('start_date', '>=', now())
+            ->orderBy('start_date', 'asc');
+    }
+
+    public function scopePast(Builder $query)
+    {
+        return $query->where('start_date', '<', now())
+            ->orderBy('start_date', 'desc');
     }
 }

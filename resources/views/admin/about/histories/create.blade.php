@@ -13,12 +13,29 @@
                         @include('admin.about.histories.partials.form')
 
                         <div class="mt-6 flex items-center gap-3">
-                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-semibold">Save</button>
-                            <a href="{{ route('admin.about.histories.index') }}" class="text-sm text-gray-600 hover:underline">Cancel</a>
+                            <button type="submit"
+                                class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-semibold">Save</button>
+                            <a href="{{ route('admin.about.histories.index') }}"
+                                class="text-sm text-gray-600 hover:underline">Cancel</a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script src="https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js"></script>
+        <script>
+            ClassicEditor
+                .create(document.querySelector('#description'), {
+                    ckfinder: {
+                        uploadUrl: '{{ route('admin.upload', ['_token' => csrf_token()]) }}'
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        </script>
+    @endpush
 </x-app-layout>

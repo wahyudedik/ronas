@@ -9,17 +9,35 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('admin.about.histories.update', $history) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('admin.about.histories.update', $history) }}"
+                        enctype="multipart/form-data">
                         @method('PUT')
                         @include('admin.about.histories.partials.form')
 
                         <div class="mt-6 flex items-center gap-3">
-                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-semibold">Update</button>
-                            <a href="{{ route('admin.about.histories.index') }}" class="text-sm text-gray-600 hover:underline">Cancel</a>
+                            <button type="submit"
+                                class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-semibold">Update</button>
+                            <a href="{{ route('admin.about.histories.index') }}"
+                                class="text-sm text-gray-600 hover:underline">Cancel</a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script src="https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js"></script>
+        <script>
+            ClassicEditor
+                .create(document.querySelector('#description'), {
+                    ckfinder: {
+                        uploadUrl: '{{ route('admin.upload', ['_token' => csrf_token()]) }}'
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        </script>
+    @endpush
 </x-app-layout>

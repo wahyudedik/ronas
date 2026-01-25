@@ -8,6 +8,7 @@ use App\Http\Controllers\CollegeCampusFacilitiesController;
 use App\Http\Controllers\CollegeStudentsLifeController;
 use App\Http\Controllers\CollegeNewsController;
 use App\Http\Controllers\CollegeEventsController;
+use App\Http\Controllers\CollegeAlumniController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Admin\LandingSectionController;
@@ -49,6 +50,15 @@ use App\Http\Controllers\Admin\CampusMapCategoryController;
 use App\Http\Controllers\Admin\CampusMapActionController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\AlumniStoryController;
+use App\Http\Controllers\Admin\AlumniEventController;
+use App\Http\Controllers\Admin\GetInvolvedController;
+use App\Http\Controllers\Admin\DonationCampaignController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Admin\ContactInfoController;
+use App\Http\Controllers\Admin\ContactMessageController;
+use App\Http\Controllers\Admin\ContactSettingController;
+use App\Http\Controllers\Admin\UploadController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('college.index');
@@ -62,11 +72,33 @@ Route::get('/news', [CollegeNewsController::class, 'index'])->name('college.news
 Route::get('/news/{news}', [CollegeNewsController::class, 'show'])->name('college.news.show');
 Route::get('/events', [CollegeEventsController::class, 'index'])->name('college.events');
 Route::get('/events/{event}', [CollegeEventsController::class, 'show'])->name('college.events.show');
-Route::view('/alumni', 'college.alumni')->name('college.alumni');
-Route::view('/contact', 'college.contact')->name('college.contact');
-Route::view('/privacy', 'college.privacy')->name('college.privacy');
-Route::view('/terms-of-service', 'college.terms-of-service')->name('college.terms-of-service');
-Route::view('/starter-page', 'college.starter-page')->name('college.starter');
+Route::post('/events/{event}/register', [CollegeEventsController::class, 'register'])->name('college.events.register');
+
+// Public Alumni Routes
+Route::prefix('alumni')->name('college.alumni')->group(function () {
+    Route::get('/', [CollegeAlumniController::class, 'index'])->name('.index');
+    Route::get('/stories/{story}', [CollegeAlumniController::class, 'storyDetail'])->name('.story-detail');
+    Route::match(['get', 'post'], '/submit-story', [CollegeAlumniController::class, 'submitStory'])->middleware('auth')->name('.submit-story');
+    Route::get('/events', [CollegeAlumniController::class, 'events'])->name('.events');
+    Route::get('/events/{event}', [CollegeAlumniController::class, 'eventDetail'])->name('.event-detail');
+    Route::get('/donate/{campaign?}', [CollegeAlumniController::class, 'donate'])->name('.donate');
+    Route::post('/donate/process', [CollegeAlumniController::class, 'processDonation'])->name('.process-donation');
+});
+
+Route::match(['get', 'post'], '/contact', [ContactController::class, 'index'])->name('college.contact');
+Route::post('/contact/store', [ContactController::class, 'store'])->name('college.contact.store');
+// Legal Pages (Dynamic)
+Route::get('/legal/{slug}', [\App\Http\Controllers\LegalPageController::class, 'show'])->name('legal.show');
+// Aliases for specific pages to match existing links if needed, or redirect
+Route::get('/privacy', function () {
+    return redirect()->route('legal.show', 'privacy');
+})->name('college.privacy');
+Route::get('/terms-of-service', function () {
+    return redirect()->route('legal.show', 'terms-of-service');
+})->name('college.terms-of-service');
+Route::get('/starter-page', function () {
+    return redirect()->route('legal.show', 'starter-page');
+})->name('college.starter');
 Route::view('/404', 'college.404')->name('college.404');
 
 Route::get('/dashboard', function () {
@@ -215,6 +247,33 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:manage events')->prefix('dashboard')->name('admin.')->group(function () {
         Route::resource('events', EventController::class);
     });
+
+    // Admin Alumni Routes - For now, we'll assume general admin access or create a new permission later.
+    // Using 'auth' middleware is already covered by the parent group.
+    Route::prefix('dashboard/alumni')->name('admin.alumni.')->group(function () {
+        Route::resource('stories', AlumniStoryController::class);
+        Route::resource('events', AlumniEventController::class);
+        Route::resource('involved', GetInvolvedController::class);
+        Route::resource('donations', DonationCampaignController::class);
+    });
+    // Admin Contact Routes
+    Route::prefix('dashboard/contact')->name('admin.contact.')->group(function () {
+        Route::get('info', [ContactInfoController::class, 'index'])->name('info.index');
+        Route::get('info/edit/{contact}', [ContactInfoController::class, 'edit'])->name('info.edit');
+        Route::put('info/update/{contact}', [ContactInfoController::class, 'update'])->name('info.update');
+
+        Route::resource('messages', ContactMessageController::class);
+
+        Route::get('settings', [ContactSettingController::class, 'index'])->name('settings.index');
+        Route::put('settings/update', [ContactSettingController::class, 'update'])->name('settings.update');
+    });
+
+    // Admin Legal Pages Routes
+    Route::middleware('permission:manage legal pages')->prefix('dashboard/legal')->name('admin.legal.')->group(function () {
+        Route::resource('pages', \App\Http\Controllers\Admin\LegalPageController::class);
+    });
+
+    Route::post('/dashboard/upload-image', [UploadController::class, 'upload'])->name('admin.upload');
 });
 
 require __DIR__ . '/auth.php';

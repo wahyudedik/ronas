@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class NewsCategory extends Model
+{
+    protected $fillable = ['name', 'slug', 'description'];
+
+    public function news()
+    {
+        return $this->hasMany(News::class, 'category_id');
+    }
+}

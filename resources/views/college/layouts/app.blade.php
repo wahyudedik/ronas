@@ -111,12 +111,30 @@
                     <li><a href="{{ route('college.students-life') }}"
                             class="{{ request()->routeIs('college.students-life') ? 'active' : '' }}">Students Life</a>
                     </li>
-                    <li><a href="{{ route('college.news') }}"
-                            class="{{ request()->routeIs('college.news') ? 'active' : '' }}">News</a></li>
-                    <li><a href="{{ route('college.events') }}"
-                            class="{{ request()->routeIs('college.events') ? 'active' : '' }}">Events</a></li>
-                    <li><a href="{{ route('college.alumni') }}"
-                            class="{{ request()->routeIs('college.alumni') ? 'active' : '' }}">Alumni</a></li>
+
+                    <li class="dropdown">
+                        <a href="{{ route('college.news') }}"
+                            class="{{ request()->routeIs('college.news*') ? 'active' : '' }}"><span>News</span> <i
+                                class="bi bi-chevron-down toggle-dropdown"></i></a>
+                        <ul>
+                            <li><a href="{{ route('college.news') }}">All News</a></li>
+                            <li><a href="{{ route('college.news') }}">Categories</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="{{ route('college.events') }}"
+                            class="{{ request()->routeIs('college.events*') ? 'active' : '' }}"><span>Events</span> <i
+                                class="bi bi-chevron-down toggle-dropdown"></i></a>
+                        <ul>
+                            <li><a href="{{ route('college.events') }}">Upcoming Events</a></li>
+                            <li><a href="{{ route('college.events', ['view' => 'past']) }}">Past Events</a></li>
+                            <li><a href="{{ route('college.events') }}">Calendar</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="{{ route('college.alumni.index') }}"
+                            class="{{ request()->routeIs('college.alumni*') ? 'active' : '' }}">Alumni</a></li>
                     <li><a href="{{ route('college.contact') }}"
                             class="{{ request()->routeIs('college.contact') ? 'active' : '' }}">Contact</a></li>
                 </ul>

@@ -30,6 +30,7 @@ class UserSeeder extends Seeder
             'manage facilities',
             'manage news',
             'manage events',
+            'approve content', // For Admin/Editor
         ];
 
         foreach ($permissions as $permission) {
@@ -39,17 +40,23 @@ class UserSeeder extends Seeder
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
         $adminRole = Role::findOrCreate('admin', 'web');
+        $editorRole = Role::findOrCreate('editor', 'web');
         $userRole = Role::findOrCreate('user', 'web');
 
         $adminRole->syncPermissions($permissions);
-        $userRole->syncPermissions([
+
+        $editorRole->syncPermissions([
+            'manage news',
+            'manage events',
             'manage landing',
             'manage about',
             'manage admissions',
             'manage academics',
             'manage facilities',
-            'manage news',
-            'manage events',
+        ]);
+
+        $userRole->syncPermissions([
+            // Limited permissions if any
         ]);
 
         $adminEmail = env('ADMIN_EMAIL', 'admin@gmail.com');
@@ -63,6 +70,15 @@ class UserSeeder extends Seeder
             ]
         );
         $admin->syncRoles(['admin']);
+
+        $editor = User::updateOrCreate(
+            ['email' => 'editor@example.com'],
+            [
+                'name' => 'Editor',
+                'password' => Hash::make('password'),
+            ]
+        );
+        $editor->syncRoles(['editor']);
 
         $user = User::updateOrCreate(
             ['email' => 'user@gmail.com'],

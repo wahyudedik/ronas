@@ -22,7 +22,12 @@ class DatabaseSeeder extends Seeder
         $this->call(AcademicsPageSeeder::class);
         $this->call(StudentLifePageSeeder::class);
         $this->call(CampusFacilitiesSeeder::class);
+
+        // News & Events
+        $this->call(NewsCategorySeeder::class);
         $this->call(NewsSeeder::class);
+
+        $this->call(EventCategorySeeder::class);
         $this->call(EventSeeder::class);
     }
 }

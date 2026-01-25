@@ -2,26 +2,27 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Builder;
 
 class News extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'title',
         'slug',
-        'category',
+        'category_id',
         'excerpt',
         'content',
-        'author_name',
-        'author_image',
+        'author_id',
+        'author_image', // Keep for backward compatibility or direct upload
         'image',
         'published_at',
         'is_active',
         'sort_order',
+        'status',
+        'meta_keywords',
+        'meta_description'
     ];
 
     protected $casts = [
@@ -29,25 +30,25 @@ class News extends Model
         'is_active' => 'boolean',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($news) {
-            if (empty($news->slug)) {
-                $news->slug = Str::slug($news->title);
-            }
-        });
-
-        static::updating(function ($news) {
-            if ($news->isDirty('title') && empty($news->slug)) {
-                $news->slug = Str::slug($news->title);
-            }
-        });
-    }
-
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(NewsCategory::class, 'category_id');
+    }
+
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'author_id');
+    }
+
+    public function scopePublished(Builder $query)
+    {
+        return $query->where('status', 'published')
+            ->where('is_active', true)
+            ->whereDate('published_at', '<=', now());
     }
 }

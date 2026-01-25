@@ -28,22 +28,25 @@
             <div class="events-list">
               @forelse($events as $index => $event)
                 <div class="event-item" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
-                  @if($event->event_date)
+                  @if($event->start_date)
                     <div class="event-date">
-                      <span class="day">{{ $event->event_date->format('d') }}</span>
-                      <span class="month">{{ $event->event_date->format('M') }}</span>
+                      <span class="day">{{ $event->start_date->format('d') }}</span>
+                      <span class="month">{{ $event->start_date->format('M') }}</span>
                     </div>
                   @endif
                   <div class="event-content">
                     <h3 class="event-title">{{ $event->title }}</h3>
                     <div class="event-meta">
-                      @if($event->event_time)
-                        <span><i class="bi bi-clock"></i> {{ $event->event_time }}</span>
+                      @if($event->start_time)
+                        <span><i class="bi bi-clock"></i> {{ \Carbon\Carbon::parse($event->start_time)->format('h:i A') }}</span>
                       @endif
-                      @if($event->location)
-                        <span><i class="bi bi-geo-alt"></i> {{ $event->location }}</span>
+                      @if($event->venue)
+                        <span><i class="bi bi-geo-alt"></i> {{ $event->venue }}</span>
                       @endif
                     </div>
+                    @if($event->category)
+                      <span class="badge bg-light text-dark mb-2">{{ $event->category->name }}</span>
+                    @endif
                     @if($event->description)
                       <p class="event-description">{{ Str::limit($event->description, 150) }}</p>
                     @endif
@@ -81,30 +84,31 @@
                 </form>
               </div>
 
+              <!-- View Filter -->
+              <div class="sidebar-item categories" data-aos="fade-up" data-aos-delay="50">
+                <h4>View</h4>
+                <ul class="list-unstyled">
+                    <li><a href="{{ route('college.events') }}" class="{{ !request('view') ? 'fw-bold' : '' }}">Upcoming Events</a></li>
+                    <li><a href="{{ route('college.events', ['view' => 'past']) }}" class="{{ request('view') == 'past' ? 'fw-bold' : '' }}">Past Events</a></li>
+                </ul>
+              </div>
+
               <!-- Categories -->
-              @php
-                $categories = \App\Models\Event::where('is_active', true)
-                  ->whereNotNull('category')
-                  ->selectRaw('category, COUNT(*) as count')
-                  ->groupBy('category')
-                  ->get();
-              @endphp
               @if($categories->count() > 0)
                 <div class="sidebar-item categories" data-aos="fade-up" data-aos-delay="100">
                   <h4>Event Categories</h4>
                   <ul class="list-unstyled">
+                    <li><a href="{{ route('college.events') }}">All Events</a></li>
                     @foreach($categories as $cat)
-                      <li><a href="{{ route('college.events') }}?category={{ urlencode($cat->category) }}">{{ $cat->category }} <span>({{ $cat->count }})</span></a></li>
+                      <li><a href="{{ route('college.events') }}?category={{ $cat->slug }}">{{ $cat->name }}</a></li>
                     @endforeach
                   </ul>
                 </div>
               @endif
 
-              <!-- Upcoming Events -->
+              <!-- Upcoming Events Widget -->
               @php
-                $upcomingEvents = \App\Models\Event::where('is_active', true)
-                  ->where('event_date', '>=', now())
-                  ->orderBy('event_date')
+                $upcomingEvents = \App\Models\Event::upcoming()
                   ->take(3)
                   ->get();
               @endphp
@@ -118,8 +122,8 @@
                       @endif
                       <div class="featured-event-details">
                         <h5>{{ $upcoming->title }}</h5>
-                        @if($upcoming->event_date)
-                          <span class="event-date"><i class="bi bi-calendar"></i> {{ $upcoming->event_date->format('M d, Y') }}</span>
+                        @if($upcoming->start_date)
+                          <span class="event-date"><i class="bi bi-calendar"></i> {{ $upcoming->start_date->format('M d, Y') }}</span>
                         @endif
                         <a href="{{ route('college.events.show', $upcoming) }}" class="btn-sm btn-register">View Details</a>
                       </div>

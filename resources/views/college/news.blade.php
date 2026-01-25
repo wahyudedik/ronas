@@ -41,7 +41,7 @@
                   <div class="post-content">
                     <div class="post-meta">
                       @if($featuredNews->category)
-                        <span class="category">{{ $featuredNews->category }}</span>
+                        <span class="category">{{ $featuredNews->category->name }}</span>
                       @endif
                       @if($featuredNews->published_at)
                         <span class="date">{{ $featuredNews->published_at->format('m/d/Y') }}</span>
@@ -53,12 +53,10 @@
                     @if($featuredNews->excerpt)
                       <p class="post-excerpt">{{ $featuredNews->excerpt }}</p>
                     @endif
-                    @if($featuredNews->author_name)
-                      <div class="post-author">
-                        <span>by</span>
-                        <a href="#">{{ $featuredNews->author_name }}</a>
-                      </div>
-                    @endif
+                    <div class="post-author">
+                      <span>by</span>
+                      <a href="#">{{ $featuredNews->author->name ?? 'Admin' }}</a>
+                    </div>
                   </div>
                 </div>
               </article>
@@ -79,7 +77,7 @@
                         <div class="post-content">
                           <div class="post-meta">
                             @if($item->category)
-                              <span class="category">{{ $item->category }}</span>
+                              <span class="category">{{ $item->category->name }}</span>
                             @endif
                             @if($item->published_at)
                               <span class="date">{{ $item->published_at->format('m/d/Y') }}</span>
@@ -88,12 +86,10 @@
                           <h3 class="post-title">
                             <a href="{{ route('college.news.show', $item) }}">{{ $item->title }}</a>
                           </h3>
-                          @if($item->author_name)
-                            <div class="post-author">
+                          <div class="post-author">
                               <span>by</span>
-                              <a href="#">{{ $item->author_name }}</a>
-                            </div>
-                          @endif
+                              <a href="#">{{ $item->author->name ?? 'Admin' }}</a>
+                          </div>
                         </div>
                       </article>
                     </div>
@@ -105,6 +101,22 @@
 
           <!-- Sidebar -->
           <div class="col-lg-4">
+            <!-- Categories Widget -->
+            <div class="news-tabs mb-4" data-aos="fade-up" data-aos-delay="150">
+                <h4 class="mb-3">Categories</h4>
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a href="{{ route('college.news') }}">All News</a>
+                    </li>
+                    @foreach($categories as $cat)
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{{ route('college.news') }}?category={{ $cat->slug }}">{{ $cat->name }}</a>
+                            <span class="badge bg-primary rounded-pill">{{ $cat->news_count ?? '' }}</span>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+
             <div class="news-tabs" data-aos="fade-up" data-aos-delay="200">
               <h4 class="mb-3">Latest News</h4>
               @if($news->count() > 0)
@@ -119,14 +131,12 @@
                       <div class="{{ $item->image ? 'col-8' : 'col-12' }}">
                         <div class="post-content">
                           @if($item->category)
-                            <span class="category">{{ $item->category }}</span>
+                            <span class="category">{{ $item->category->name }}</span>
                           @endif
                           <h4 class="post-title">
                             <a href="{{ route('college.news.show', $item) }}">{{ Str::limit($item->title, 50) }}</a>
                           </h4>
-                          @if($item->author_name)
-                            <div class="post-author">by <a href="#">{{ $item->author_name }}</a></div>
-                          @endif
+                          <div class="post-author">by <a href="#">{{ $item->author->name ?? 'Admin' }}</a></div>
                         </div>
                       </div>
                     </div>
@@ -155,7 +165,7 @@
                 </div>
 
                 @if($item->category)
-                  <p class="post-category">{{ $item->category }}</p>
+                  <p class="post-category">{{ $item->category->name }}</p>
                 @endif
 
                 <h2 class="title">
@@ -164,14 +174,12 @@
 
                 <div class="d-flex align-items-center">
                   @if($item->author_image)
-                    <img src="{{ asset(ltrim($item->author_image, '/')) }}" alt="{{ $item->author_name }}" class="img-fluid post-author-img flex-shrink-0">
-                  @elseif($item->author_name)
+                    <img src="{{ asset(ltrim($item->author_image, '/')) }}" alt="{{ $item->author->name ?? 'Admin' }}" class="img-fluid post-author-img flex-shrink-0">
+                  @else
                     <img src="/College/assets/img/person/person-f-{{ ($index % 3) + 12 }}.webp" alt="" class="img-fluid post-author-img flex-shrink-0">
                   @endif
                   <div class="post-meta">
-                    @if($item->author_name)
-                      <p class="post-author">{{ $item->author_name }}</p>
-                    @endif
+                    <p class="post-author">{{ $item->author->name ?? 'Admin' }}</p>
                     @if($item->published_at)
                       <p class="post-date">
                         <time datetime="{{ $item->published_at->format('Y-m-d') }}">{{ $item->published_at->format('M d, Y') }}</time>

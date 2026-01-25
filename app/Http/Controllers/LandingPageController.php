@@ -53,7 +53,7 @@ class LandingPageController extends Controller
             ->get();
 
         $featuredProgram = $programs->firstWhere('is_featured', true) ?? $programs->first();
-        $otherPrograms = $featuredProgram ? $programs->reject(fn ($program) => $program->id === $featuredProgram->id) : collect();
+        $otherPrograms = $featuredProgram ? $programs->reject(fn($program) => $program->id === $featuredProgram->id) : collect();
 
         $studentLifeItems = LandingStudentLifeItem::query()
             ->where('is_active', true)
@@ -71,17 +71,18 @@ class LandingPageController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        $newsItems = News::query()
+        $newsItems = News::with(['category', 'author'])
             ->where('is_active', true)
+            ->where('status', 'published')
             ->orderByDesc('published_at')
             ->orderBy('sort_order')
             ->take(6)
             ->get();
 
-        $eventItems = Event::query()
+        $eventItems = Event::with('category')
             ->where('is_active', true)
-            ->where('event_date', '>=', now())
-            ->orderBy('event_date')
+            ->where('start_date', '>=', now())
+            ->orderBy('start_date')
             ->orderBy('sort_order')
             ->take(6)
             ->get();
